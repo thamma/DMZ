@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="DMZ:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/DMZ_jar</output-path>
+    <root id="archive" name="DMZ.jar">
+      <element id="module-output" name="DMZ" />
+      <element id="extracted-dir" path="$USER_HOME$/Documents/GitHub/Spigot/BuildTools.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Documents/GitHub/Spigot/spigot-1.8.7.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Documents/GitHub/Spigot/craftbukkit-1.8.7.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
