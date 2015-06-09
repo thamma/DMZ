@@ -5,12 +5,9 @@ import me.thamma.DMZ.Utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
+import java.awt.datatransfer.Clipboard;
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Created by pc on 07.06.2015.
- */
 
 public class Chest {
 
@@ -28,6 +25,11 @@ public class Chest {
         id = -1;
     }
 
+    /**
+     * @param arg0 location
+     * @param arg1 time
+     * @param arg2 amount
+     */
     public Chest(Location arg0, int arg1, int arg2) {
         this.loc = arg0;
         this.time = arg1;
@@ -37,14 +39,17 @@ public class Chest {
     }
 
     public Location getLocation(){
-    return loc;
+    return this.loc;
 }
-    public int getTimeMillis() {
-        return time;
+    public int getTime() {
+        return this.time;
+    }
+    public int getAmount() {
+        return this.amount;
     }
 
-    public int getAmount() {
-        return amount;
+    public int getId() {
+        return this.id;
     }
 
     private Chest loadChest(int id) {
@@ -55,7 +60,10 @@ public class Chest {
 
     public static boolean isChest(Location arg0) {
         for (String s: db.getKeys("")) {
-
+            if (db.getLocation(s + ".loc").distance(arg0)<1) {
+                //is chest
+                return true;
+            }
         }
         return false;
     }
@@ -73,5 +81,6 @@ public class Chest {
         db.set(id + ".time", time);
         db.set(id + ".time", amount);
     }
+
 
 }

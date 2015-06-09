@@ -4,12 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-/**
- * Created by pc on 07.06.2015.
- */
 public class Utils {
 
-    public boolean matchArgs(String src, String[] args)
+    public static boolean matchArgs(String src, String[] args)
     {
         boolean out = true;
         String[] in = src.split(" ");
@@ -17,7 +14,7 @@ public class Utils {
             return false;
         }
         if (args.length == 0) {
-            return out;
+            return true;
         }
         for (int i = 0; i < in.length; i++) {
             if (in[i].charAt(0) == '#')
@@ -50,7 +47,7 @@ public class Utils {
         return out;
     }
 
-    private boolean isNum(String string)
+    private static boolean isNum(String string)
     {
         try
         {
@@ -63,7 +60,7 @@ public class Utils {
         return true;
     }
 
-    private boolean isBool(String string)
+    private static boolean isBool(String string)
     {
         return (string.equalsIgnoreCase("true")) ||
                 (string.equalsIgnoreCase("false"));
