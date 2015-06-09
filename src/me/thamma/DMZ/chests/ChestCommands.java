@@ -1,7 +1,8 @@
 package me.thamma.DMZ.chests;
 
-import me.thamma.DMZ.Utils.FileManager;
-import me.thamma.DMZ.Utils.Utils;
+import me.thamma.DMZ.utils.FileManager;
+import me.thamma.DMZ.utils.Utils;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -11,17 +12,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.LazyMetadataValue;
-import org.bukkit.metadata.MetadataValue;
-import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 public class ChestCommands implements CommandExecutor {
 
-    public static FileManager config = new FileManager("DMZ/plugin.yml");
+    public static FileManager config = new FileManager("DMZ/config.yml");
 
 
     public boolean onCommand (CommandSender sender, Command cmd, String label, String[] args)
@@ -32,34 +28,30 @@ public class ChestCommands implements CommandExecutor {
             Player p = (Player)sender;
             if (Utils.matchArgs("create #int #int", args))
             {
-                Block target = p.getTargetBlock(new HashSet<Material>(), 10);
+                int amount = Integer.parseInt(args[1]);
+                int time = Integer.parseInt(args[2]);
+                Block target = p.getTargetBlock(new HashSet<Material>() {{
+                    add(Material.AIR);
+                }}, 10);
 
-                if (((p.getTargetBlock(new HashSet<Material>(), 10) != null) &&
+                if (((target != null) &&
 
-                        (p.getTargetBlock(new HashSet<Material>(), 10).getType().equals(Material.CHEST))) ||
+                        (target.getType().equals(Material.CHEST))) ||
 
-                        (p.getTargetBlock(new HashSet<Material>(), 10).getType().equals(Material.TRAPPED_CHEST)))
+                        (target.getType().equals(Material.TRAPPED_CHEST)))
                 {
+
                     if (Chest.isChest(target.getLocation()))
                     {
                         p.sendMessage("This is already a respawning chest");
                     }
                     else
                     {
-                        int amount = Integer.parseInt(args[1]);
-                        int time = Integer.parseInt(args[2]);
-                        org.bukkit.block.Chest chestBlock = (org.bukkit.block.Chest) target.getState();
 
+                        org.bukkit.block.Chest chestBlock = (org.bukkit.block.Chest) target.getState();
                         //create chest
                         me.thamma.DMZ.chests.Chest vChest = new Chest(chestBlock.getLocation(), time, amount);
-
-                        Location ref = Utils.str2loc(config.getString(
-                                "chest.constants.reference", "world;-729,74,390"));
-
-                            int x = config.getInt("chest.constants.vector.x", -2);
-                            int y = config.getInt("chest.constants.vector.y", 0);
-                            int z = config.getInt("chest.constants.vector.z", 0);
-                            ref = ref.add(new Vector(x, y, z).multiply(vChest.getId()));
+                        Location ref = vChest.getRemoteChest();
 
                         ref.getBlock().setType(Material.CHEST);
                         ref.getBlock().setData((byte) 5);
@@ -84,11 +76,29 @@ public class ChestCommands implements CommandExecutor {
                 }
                 else
                 {
-                    p.sendMessage("§cYou must be facing a chest.");
+                    p.sendMessage(ChatColor.RED + "You must be facing a chest.");
                 }
-            }
-            else {
-                p.sendMessage(new String[] { "/chest create [amount] [time]" });
+            } else if (Utils.matchArgs("delete", args)) {
+                Block target = p.getTargetBlock(new HashSet<Material>() {{
+                    add(Material.AIR);
+                }}, 10);
+                if (((target != null) &&
+                        (target.getType().equals(Material.CHEST))) ||
+                        (target.getType().equals(Material.TRAPPED_CHEST))) {
+                    if (Chest.isChest(target.getLocation())) {
+                        Chest c = Chest.getChest(target.getLocation());
+                        p.sendMessage("Respawning chest (id " + c.getId() + ") deleted.");
+                        c.delete();
+                    } else {
+                        p.sendMessage(org.bukkit.ChatColor.RED + "This is no respawning chest.");
+                    }
+                } else {
+                    p.sendMessage("You must be facing a chest.");
+                }
+
+            } else {
+                p.sendMessage(new String[]{"/chest create [amount] [time]", "/chest delete"});
+
             }
         }
         return true;
