@@ -12,6 +12,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.HashSet;
 
@@ -49,6 +50,16 @@ public class ChestCommands implements CommandExecutor {
                     {
 
                         org.bukkit.block.Chest chestBlock = (org.bukkit.block.Chest) target.getState();
+                        boolean empty = true;
+                        for (ItemStack item : chestBlock.getInventory().getContents()) {
+                            if (item != null) {
+                                empty = false;
+                                break;
+                            }
+                        }
+                        if (empty) {
+                            p.sendMessage("This chest is empty, so it wont respawn anything!");
+                        } else {
                         //create chest
                         me.thamma.DMZ.chests.Chest vChest = new Chest(chestBlock.getLocation(), time, amount);
                         Location ref = vChest.getRemoteChest();
@@ -71,7 +82,8 @@ public class ChestCommands implements CommandExecutor {
                                 .setContents(
                                         chestBlock.getBlockInventory().getContents());
 
-                        p.sendMessage("Respawning chest created");
+                            p.sendMessage("Respawning chest created");
+                        }
                     }
                 }
                 else

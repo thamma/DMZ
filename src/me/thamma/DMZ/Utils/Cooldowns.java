@@ -42,7 +42,7 @@ public class Cooldowns {
         return map.containsKey(index + "." + key);
     }
 
-    public void add(String key, int millis) {   
+    public void add(String key, int millis) {
         if ((ready(key)) || (!exists(key))) {
             map.put(index + "." + key, System.currentTimeMillis() + millis);
         } else {

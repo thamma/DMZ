@@ -44,7 +44,6 @@ public class Chest {
         this.id = nextId();
 
         save();
-        fill();
     }
 
     public Chest(Location arg0, int arg1, int arg2, int arg3) {
@@ -56,15 +55,17 @@ public class Chest {
     }
 
     private static Chest loadChest(int id) {
-        if (db.contains(String.valueOf(id)))
+        if (db.contains(String.valueOf(id))) {
+            System.out.println("loading chest, id: " + id);
             return new Chest(db.getLocation(id + ".loc"), db.getInt(id + ".time"), db.getInt(id + ".amount"), id);
+        }
         return new Chest();
     }
 
     public static Chest getChest(Location arg0) {
         for (String s : db.getKeys("")) {
-            System.out.println("Key found: " + s);
             if (db.getLocation(s + ".loc").distance(arg0) < 1) {
+                System.out.println("matching key found: " + s);
                 return loadChest(Integer.parseInt(s));
             }
         }
@@ -127,7 +128,13 @@ public class Chest {
     }
 
     public void fill() {
+        cd.add(id + "", this.time * 1000);
+
         org.bukkit.block.Chest chest = (org.bukkit.block.Chest) loc.getBlock().getState();
+
+        chest.getInventory().clear();
+
+        System.out.println(getRemoteChest().getBlock().getType());
         org.bukkit.block.Chest remote = (org.bukkit.block.Chest) getRemoteChest().getBlock().getState();
         Random r = new Random();
 
@@ -152,11 +159,13 @@ public class Chest {
             //select one itemstack from rarity class
             filling.add(temp.get(r.nextInt(temp.size())));
         }
+        System.out.println("Filling.size() == " + filling.size());
         for (ItemStack is : filling) { //fill chest
             if (chest.getInventory().firstEmpty() == -1) break;
             int dest = r.nextInt(27);
             //search free spot
-            while (chest.getInventory().getItem(dest).getType() != Material.AIR || chest.getInventory().getItem(dest).getType() != null)
+            System.out.println(chest.getInventory().getContents()[dest] == null);
+            while (chest.getInventory().getContents()[dest] != null)
                 dest = r.nextInt(27);
             chest.getInventory().setItem(dest, is);
         }
@@ -164,7 +173,6 @@ public class Chest {
 
 
     public void delete() {
-        System.out.println("Delete called.");
         getRemoteChest().getBlock().setType(Material.AIR);
         cd.reset(id + "");
         db.set(String.valueOf(this.id), null);
