@@ -1,24 +1,21 @@
-package me.thamma.DMZ.Utils;
-
-/**
- * Created by pc on 07.06.2015.
- */
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+package me.thamma.DMZ.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class FileManager
 {
+    static final String prefix = "plugins/";
+    static final String suffix = ""; //".yml"
     private YamlConfiguration config;
     private String path;
-    static final String prefix = "plugins/";
 
     public FileManager(String path)
     {
@@ -31,6 +28,28 @@ public class FileManager
         {
             e.printStackTrace();
         }
+    }
+
+    public static List<FileManager> getFromFolder(String path)
+    {
+        File folder = new File("plugins/" + path);
+        ArrayList al = new ArrayList();
+        if (folder.exists())
+        {
+            File[] listOfFiles = folder.listFiles();
+            File[] arrayOfFile1;
+            int j = (arrayOfFile1 = listOfFiles).length;
+            for (int i = 0; i < j; i++)
+            {
+                File file = arrayOfFile1[i];
+                if (file.isFile()) {
+                    al.add(new FileManager(
+                            (folder.getPath() + "/" + file.getName().replaceFirst("[.][^.]+$", ""))
+                                    .replaceFirst("plugins/", "")));
+                }
+            }
+        }
+        return al;
     }
 
     public String getPath()
@@ -60,32 +79,10 @@ public class FileManager
         return al;
     }
 
-    public static List<FileManager> getFromFolder(String path)
-    {
-        File folder = new File("plugins/" + path);
-        ArrayList al = new ArrayList();
-        if (folder.exists())
-        {
-            File[] listOfFiles = folder.listFiles();
-            File[] arrayOfFile1;
-            int j = (arrayOfFile1 = listOfFiles).length;
-            for (int i = 0; i < j; i++)
-            {
-                File file = arrayOfFile1[i];
-                if (file.isFile()) {
-                    al.add(new FileManager(
-                            (folder.getPath() + "/" + file.getName().replaceFirst("[.][^.]+$", ""))
-                                    .replaceFirst("plugins/", "")));
-                }
-            }
-        }
-        return al;
-    }
-
     private YamlConfiguration loadFile(String path)
             throws IOException, InvalidConfigurationException
     {
-        File file = new File("plugins/" + path + ".yml");
+        File file = new File("plugins/" + path + suffix);
         YamlConfiguration config;
         if (!file.exists())
         {
@@ -106,7 +103,7 @@ public class FileManager
     {
         try
         {
-            this.config.save(new File("plugins/" + this.path + ".yml"));
+            this.config.save(new File("plugins/" + this.path + suffix));
         }
         catch (IOException e)
         {

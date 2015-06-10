@@ -1,4 +1,4 @@
-package me.thamma.DMZ.Utils;
+package me.thamma.DMZ.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
