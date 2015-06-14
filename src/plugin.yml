@@ -7,3 +7,12 @@ commands:
     chest:
        description: Use /chest for help
        usage: /chest
+    warp:
+       description: Use /warp for help
+       usage: /warp
+    data:
+       description: Use /data for help
+       usage: /data
+    chunky:
+       description: Use /chunky for help
+       usage: /chunky

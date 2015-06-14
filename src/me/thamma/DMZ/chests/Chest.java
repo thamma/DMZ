@@ -138,41 +138,53 @@ public class Chest {
         org.bukkit.block.Chest remote = (org.bukkit.block.Chest) getRemoteChest().getBlock().getState();
         Random r = new Random();
 
-        List<ItemStack> filling = new ArrayList<ItemStack>();
-        for (int i = 0; i < amount; i++) {
-            List<ItemStack> temp = new ArrayList<ItemStack>();
-            int chance = r.nextInt(100);
-            //interprete rarity
-            if (chance < 70) { //common
-                for (int j = 0; j < 18; j++) {
-                    temp.add(remote.getInventory().getItem(j));
+        List<ItemStack> common = new ArrayList<ItemStack>();
+        List<ItemStack> uncommon = new ArrayList<ItemStack>();
+        List<ItemStack> rare = new ArrayList<ItemStack>();
+
+
+        for (int j = 0; j < 8; j++) {
+            if (remote.getInventory().getContents()[j] != null)
+                common.add(remote.getInventory().getItem(j));
                 }
-            } else if (chance < 95) { //uncommon
-                for (int j = 18; j < 24; j++) {
-                    temp.add(remote.getInventory().getItem(j));
+
+        for (int j = 9; j < 17; j++) {
+            if (remote.getInventory().getContents()[j] != null)
+                uncommon.add(remote.getInventory().getItem(j));
                 }
-            } else {//rare
-                for (int j = 24; j < 27; j++) {
-                    temp.add(remote.getInventory().getItem(j));
-                }
-            }
-            //select one itemstack from rarity class
-            filling.add(temp.get(r.nextInt(temp.size())));
+
+        for (int j = 18; j < 26; j++) {
+            if (remote.getInventory().getContents()[j] != null)
+                rare.add(remote.getInventory().getItem(j));
         }
-        System.out.println("Filling.size() == " + filling.size());
-        for (ItemStack is : filling) { //fill chest
-            if (chest.getInventory().firstEmpty() == -1) break;
+
+            //select one itemstack from rarity class
+        for (int i = 0; i < this.amount; i++) { //fill chest
+            if (chest.getInventory().firstEmpty() == -1) break; //cheat already full
+
+            int rarity = r.nextInt(100);
+            ItemStack item;
+            if (rarity < 70) {
+                item = common.get(r.nextInt(common.size()));
+            } else if (rarity < 95) {
+                item = uncommon.get(r.nextInt(common.size()));
+            } else {
+                item = rare.get(r.nextInt(common.size()));
+            }
+
             int dest = r.nextInt(27);
             //search free spot
             System.out.println(chest.getInventory().getContents()[dest] == null);
             while (chest.getInventory().getContents()[dest] != null)
                 dest = r.nextInt(27);
-            chest.getInventory().setItem(dest, is);
+            chest.getInventory().setItem(dest, item);
         }
     }
 
 
     public void delete() {
+        org.bukkit.block.Chest chest = (org.bukkit.block.Chest) loc.getBlock().getState();
+        chest.getInventory().setContents(((org.bukkit.block.Chest) (getRemoteChest().getBlock().getState())).getBlockInventory().getContents());
         getRemoteChest().getBlock().setType(Material.AIR);
         cd.reset(id + "");
         db.set(String.valueOf(this.id), null);
