@@ -1,13 +1,19 @@
 package me.thamma.DMZ.data;
 
+import me.thamma.DMZ.utils.Task;
 import me.thamma.DMZ.utils.Utils;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by pc on 12.06.2015.
@@ -33,7 +39,7 @@ public class DataListener implements Listener {
                     DataCommands.tasks.remove(p.getName());
                 }
                 p.sendMessage("Task completed.");
-                DataCommands.Task t = DataCommands.tasks.get(p.getName());
+                Task t = DataCommands.tasks.get(p.getName());
                 t.run(messages.get(p.getName()), p);
                 messages.get(p.getName()).clear();
                 DataCommands.tasks.remove(p.getName());
@@ -45,7 +51,34 @@ public class DataListener implements Listener {
                 messages.put(p.getName(), l);
             }
         }
-
     }
+
+    @EventHandler
+    public void onInteract(PlayerInteractEvent e) {
+        if (e.getAction().toString().contains("RIGHT"))
+            if (e.getPlayer().getItemInHand() != null)
+                if (e.getPlayer().getItemInHand().hasItemMeta())
+                    if (e.getPlayer().getItemInHand().getItemMeta().getDisplayName().toLowerCase().contains("powertool")) {
+                        if (e.getPlayer().getItemInHand().getItemMeta().getLore().get(0).toLowerCase().contains("cycle")) {
+                            List<String> l = e.getPlayer().getItemInHand().getItemMeta().getLore();
+                            l.remove(0);//remove cycle
+                            String s = l.remove(0);
+                            e.getPlayer().performCommand(s);
+                            l.add(s);
+                            l.add(0,"cycle");
+                            ItemStack is = e.getPlayer().getItemInHand();
+                            ItemMeta im = is.getItemMeta();
+                            im.setLore(l);
+                            is.setItemMeta(im);
+                            e.getPlayer().setItemInHand(is);
+                        } else {
+                            String dat = "";
+                            for (String s : e.getPlayer().getItemInHand().getItemMeta().getLore())
+                                dat += ChatColor.stripColor(s);
+                            e.getPlayer().performCommand(dat);
+                        }
+                    }
+    }
+
 
 }

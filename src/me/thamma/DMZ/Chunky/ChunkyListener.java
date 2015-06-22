@@ -1,5 +1,7 @@
-package me.thamma.DMZ.Chunkys;
+package me.thamma.DMZ.Chunky;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -32,14 +34,17 @@ public class ChunkyListener implements Listener {
         add(EntityType.SLIME);
     }};
 
+
     @EventHandler
     public void onSpawn(CreatureSpawnEvent e) {
-        if (Chunky.isChunky(e.getLocation())) {
-            Chunky c = new Chunky(e.getLocation());
-            if (c.getAttribute(Attribute.Mobspawn) == "false")
-                if (hostiles.contains(e.getEntity().getType())) {
-                    e.setCancelled(true);
-                }
+        Location loc = e.getLocation();
+        Chunky c = new Chunky(loc.getChunk().getX(), loc.getChunk().getZ());
+
+        if (c.getAttribute(Attribute.Mobspawn) == "false") {
+
+            if (hostiles.contains(e.getEntity().getType())) {
+                e.setCancelled(true);
+            }
         }
     }
 }

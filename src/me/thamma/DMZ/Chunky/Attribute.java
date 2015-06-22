@@ -1,11 +1,11 @@
-package me.thamma.DMZ.Chunkys;
+package me.thamma.DMZ.Chunky;
 
 /**
  * Created by pc on 14.06.2015.
  */
 public enum Attribute {
 
-    Mobspawn("false");
+    Mobspawn("false"),Level("1");
 
 
     private String def;
