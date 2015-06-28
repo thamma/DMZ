@@ -1,6 +1,8 @@
 package me.thamma.DMZ.data;
 
+import me.thamma.DMZ.Battle.MyItem;
 import me.thamma.DMZ.core.Main;
+import me.thamma.DMZ.utils.Task;
 import me.thamma.DMZ.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -13,15 +15,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import me.thamma.DMZ.utils.Task;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TimerTask;
 
 /**
  * Created by pc on 11.06.2015.
@@ -38,7 +37,7 @@ public class DataCommands implements CommandExecutor {
     private static int task = 0;
 
     public DataCommands(Main m) {
-        this.plugin = m;
+        plugin = m;
     }
 
     @Override
@@ -49,6 +48,18 @@ public class DataCommands implements CommandExecutor {
                 if (Utils.matchArgs("ac", args)) {
                     Chest c = (Chest) ((new Location(Bukkit.getWorld("world"),0,0,0).getBlock().getState()));
                     p.openInventory(c.getBlockInventory());
+                } else if (Utils.matchArgs("update", args)) {
+                    p.setHealthScaled(true);
+                    p.setMaxHealth(100 + p.getLevel() * 10);
+                    p.setHealthScale(p.getMaxHealth() / 5);
+                    p.setHealth(p.getMaxHealth());
+                    MyItem is = new MyItem(Material.WOOD_SWORD);
+                    is.setName("&aKokiri Sword");
+                    is.addEnchantment(new MyItem.MyEnchantment(MyItem.EnchantmentType.Damage, 3));
+                    is.addEnchantment(new MyItem.MyEnchantment(MyItem.EnchantmentType.Poison, 2));
+                    is.setLevel(3);
+                    is.setLore(new String[]{"Totally not stolen from Link."});
+                    p.getInventory().addItem(is.getItemStack());
                 } else if (Utils.matchArgs("toolbar", args)) {
                     IconMenu menu = new IconMenu("Admin toolbar", 27, new IconMenu.OptionClickEventHandler() {
                         @Override
@@ -59,11 +70,16 @@ public class DataCommands implements CommandExecutor {
                                 case 18:e.getPlayer().setGameMode(GameMode.SPECTATOR);break;
                                 case 12:e.getPlayer().setHealth(e.getPlayer().getMaxHealth());break;
                                 case 13:e.getPlayer().setFoodLevel(20);e.getPlayer().setExhaustion(1F);break;
-                                case 14:if (e.getPlayer().hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
+                                case 14:
+                                    Bukkit.broadcastMessage("Called");
+                                    if (e.getPlayer().hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
                                     e.getPlayer().removePotionEffect(PotionEffectType.NIGHT_VISION);
+                                        Bukkit.broadcastMessage("removed");
                                 } else {
                                     e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 500000, 0));
-                                };break;
+                                        Bukkit.broadcastMessage("added");
+                                    }
+                                    break;
                             }
                         }
                     }, plugin)

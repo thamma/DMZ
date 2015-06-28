@@ -1,12 +1,15 @@
 package me.thamma.DMZ.Chunky;
 
+import me.thamma.DMZ.Battle.BattleListener;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.ArrayList;
@@ -40,7 +43,26 @@ public class ChunkyListener implements Listener {
     public static HashMap<String, String> lastChunk;
 
     @EventHandler
+    public void onTarget(EntityTargetLivingEntityEvent e) {
+        if (e.getEntity().getType().equals(EntityType.ZOMBIE)) {
+            if (e.getEntity().getLocation().distance(e.getTarget().getLocation()) > 15) {
+                //e.setTarget(null);
+                e.setCancelled(true);
+            }
+        }
+    }
+
+
+    @EventHandler
     public void onSpawn(CreatureSpawnEvent e) {
+        if (e.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.SPAWNER_EGG))
+            return;
+        for (Entity en : e.getEntity().getNearbyEntities(20, 20, 20)) {
+            if (en.getType().equals(EntityType.PLAYER)) {
+                e.setCancelled(true);
+            }
+        }
+
         Location loc = e.getLocation();
         Chunky c = new Chunky(e.getLocation());
         if (c.getAttribute(Attribute.Mobspawn).equals("false")) {
@@ -51,8 +73,12 @@ public class ChunkyListener implements Listener {
             if (!e.getEntityType().equals(EntityType.ZOMBIE)) {
                 e.setCancelled(true);
             } else {
+
                 Zombie z = (Zombie) e.getEntity();
-                z.setCustomName("Zombie Lv." + c.getAttribute(Attribute.Level));
+                int level = Integer.parseInt(c.getAttribute(Attribute.Level));
+                z.setCustomName("Zombie Lv." + level);
+                z.setMaxHealth(BattleListener.healthAtLevel(level));
+                z.setHealth(z.getMaxHealth());
                 z.setCustomNameVisible(true);
             }
         }

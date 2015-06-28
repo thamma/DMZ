@@ -1,5 +1,6 @@
 package me.thamma.DMZ.core;
 
+import me.thamma.DMZ.Battle.BattleListener;
 import me.thamma.DMZ.Chunky.Chunky;
 import me.thamma.DMZ.Chunky.ChunkyCommands;
 import me.thamma.DMZ.Chunky.ChunkyListener;
@@ -26,6 +27,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ChestListener(), this);
         getServer().getPluginManager().registerEvents(new DataListener(), this);
         getServer().getPluginManager().registerEvents(new ChunkyListener(), this);
+        getServer().getPluginManager().registerEvents(new BattleListener(), this);
 
         ChunkyListener.lastChunk = new HashMap<String, String>();
         ChunkyListener.settings = new HashMap<String, ChunkyListener.Setting>();

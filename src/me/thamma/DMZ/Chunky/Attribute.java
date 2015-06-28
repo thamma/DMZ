@@ -5,7 +5,7 @@ package me.thamma.DMZ.Chunky;
  */
 public enum Attribute {
 
-    Mobspawn("false"),Level("1");
+    Mobspawn("false"), Level("1"), Invincible("false");
 
 
     private String def;

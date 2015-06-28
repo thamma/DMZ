@@ -16,10 +16,8 @@ public class ChestListener implements Listener {
                 System.out.println(e.getClickedBlock().getType());
                 org.bukkit.block.Chest chestBlock = (org.bukkit.block.Chest) e.getClickedBlock().getState();
                 if (Chest.isChest(chestBlock.getLocation())) {
-                    System.out.println("ischest");
                     Chest vChest = Chest.getChest(chestBlock.getLocation());
                     if (vChest.willRefill()) {
-                        System.out.println("will  refill");
                         vChest.fill();
                     }
 
