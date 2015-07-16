@@ -4,6 +4,7 @@ import me.thamma.DMZ.Battle.BattleListener;
 import me.thamma.DMZ.Chunky.Chunky;
 import me.thamma.DMZ.Chunky.ChunkyCommands;
 import me.thamma.DMZ.Chunky.ChunkyListener;
+import me.thamma.DMZ.chests.Chest;
 import me.thamma.DMZ.chests.ChestCommands;
 import me.thamma.DMZ.chests.ChestListener;
 import me.thamma.DMZ.data.DataCommands;
@@ -24,7 +25,7 @@ public class Main extends JavaPlugin {
         getCommand("chunky").setExecutor(new ChunkyCommands());
 
         getServer().getPluginManager().registerEvents(new MyListener(this), this);
-        getServer().getPluginManager().registerEvents(new ChestListener(), this);
+        getServer().getPluginManager().registerEvents(new ChestListener(this), this);
         getServer().getPluginManager().registerEvents(new DataListener(), this);
         getServer().getPluginManager().registerEvents(new ChunkyListener(), this);
         getServer().getPluginManager().registerEvents(new BattleListener(), this);
@@ -33,6 +34,7 @@ public class Main extends JavaPlugin {
         ChunkyListener.settings = new HashMap<String, ChunkyListener.Setting>();
         me.thamma.DMZ.utils.Cooldowns.initialize();
         me.thamma.DMZ.Chunky.Chunky.initializeMap();
+        Chest.respawnAll();
 
     }
 

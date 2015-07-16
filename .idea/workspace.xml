@@ -6,15 +6,11 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="31240653-050a-4ade-b3d9-dc737cac17fa" name="Default" comment="BattleListener, MyItem added, working as intended.">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/me/thamma/DMZ/Chunky/Attribute.java" afterPath="$PROJECT_DIR$/src/me/thamma/DMZ/Chunky/Attribute.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/me/thamma/DMZ/Battle/BattleListener.java" afterPath="$PROJECT_DIR$/src/me/thamma/DMZ/Battle/BattleListener.java" />
+    <list default="true" id="31240653-050a-4ade-b3d9-dc737cac17fa" name="Default" comment="Reworking respawning chests, Chest.fill() broken">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/me/thamma/DMZ/chests/Chest.java" afterPath="$PROJECT_DIR$/src/me/thamma/DMZ/chests/Chest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/me/thamma/DMZ/chests/ChestCommands.java" afterPath="$PROJECT_DIR$/src/me/thamma/DMZ/chests/ChestCommands.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/me/thamma/DMZ/chests/ChestListener.java" afterPath="$PROJECT_DIR$/src/me/thamma/DMZ/chests/ChestListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/me/thamma/DMZ/Chunky/ChunkyListener.java" afterPath="$PROJECT_DIR$/src/me/thamma/DMZ/Chunky/ChunkyListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/me/thamma/DMZ/data/DataCommands.java" afterPath="$PROJECT_DIR$/src/me/thamma/DMZ/data/DataCommands.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/me/thamma/DMZ/data/DataListener.java" afterPath="$PROJECT_DIR$/src/me/thamma/DMZ/data/DataListener.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/me/thamma/DMZ/core/Main.java" afterPath="$PROJECT_DIR$/src/me/thamma/DMZ/core/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/me/thamma/DMZ/Battle/MyItem.java" afterPath="$PROJECT_DIR$/src/me/thamma/DMZ/Battle/MyItem.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="DMZ.iws" />
@@ -44,7 +40,7 @@
             <state vertical-scroll-proportion="0.0">
               <caret line="51" column="20" selection-start-line="51" selection-start-column="20" selection-end-line="51" selection-end-column="20" />
               <folding>
-                <marker date="1435492174037" expanded="true" signature="36:698" placeholder="..." />
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -55,11 +51,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="163" column="9" selection-start-line="163" selection-start-column="9" selection-end-line="163" selection-end-column="9" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#3202#3210#0" expanded="false" />
-                <element signature="e#3409#3417#0" expanded="false" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -70,7 +62,7 @@
             <state vertical-scroll-proportion="0.0">
               <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
               <folding>
-                <marker date="1435492172742" expanded="true" signature="38:296" placeholder="..." />
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -80,7 +72,7 @@
         <entry file="file://$PROJECT_DIR$/src/me/thamma/DMZ/core/Main.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="29" column="64" selection-start-line="29" selection-start-column="64" selection-end-line="29" selection-end-column="64" />
+              <caret line="36" column="27" selection-start-line="36" selection-start-column="27" selection-end-line="36" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -90,28 +82,37 @@
         <entry file="file://$PROJECT_DIR$/src/me/thamma/DMZ/chests/Chest.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="39" column="12" selection-start-line="39" selection-start-column="11" selection-end-line="39" selection-end-column="12" />
-              <folding />
+              <caret line="158" column="83" selection-start-line="158" selection-start-column="83" selection-end-line="158" selection-end-column="83" />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#2106#2107#0" expanded="true" />
+                <element signature="e#2153#2154#0" expanded="true" />
+                <element signature="e#3661#3785#0" expanded="true" />
+                <element signature="e#3784#3785#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ChunkyListener.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ChunkyListener.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/me/thamma/DMZ/Chunky/ChunkyListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7342932">
-              <caret line="59" column="59" selection-start-line="59" selection-start-column="59" selection-end-line="59" selection-end-column="59" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="75" column="0" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ChestListener.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ChestListener.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/me/thamma/DMZ/chests/ChestListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="16" column="66" selection-start-line="16" selection-start-column="66" selection-end-line="16" selection-end-column="66" />
-              <folding />
+            <state vertical-scroll-proportion="0.64528793">
+              <caret line="38" column="61" selection-start-line="38" selection-start-column="61" selection-end-line="38" selection-end-column="61" />
+              <folding>
+                <element signature="e#534#535#0" expanded="true" />
+                <element signature="e#579#580#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -120,8 +121,13 @@
         <entry file="file://$PROJECT_DIR$/src/me/thamma/DMZ/chests/ChestCommands.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="18" column="53" selection-start-line="18" selection-start-column="27" selection-end-line="18" selection-end-column="53" />
-              <folding />
+              <caret line="22" column="0" selection-start-line="72" selection-start-column="43" selection-end-line="72" selection-end-column="46" />
+              <folding>
+                <marker date="1437062972289" expanded="true" signature="1631:1691" placeholder="{...}" />
+                <marker date="1437062972289" expanded="true" signature="1632:1690" placeholder="{...}" />
+                <marker date="1437062972289" expanded="true" signature="4397:4457" placeholder="{...}" />
+                <marker date="1437062972289" expanded="true" signature="4398:4456" placeholder="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -160,8 +166,6 @@
         <option value="$PROJECT_DIR$/src/me/thamma/DMZ/Utils/Cooldowns.java" />
         <option value="$PROJECT_DIR$/src/me/thamma/DMZ/utils/FileManager.java" />
         <option value="$PROJECT_DIR$/src/me/thamma/DMZ/utils/Cooldowns.java" />
-        <option value="$PROJECT_DIR$/src/me/thamma/DMZ/chests/ChestCommands.java" />
-        <option value="$PROJECT_DIR$/src/me/thamma/DMZ/chests/Chest.java" />
         <option value="$PROJECT_DIR$/src/me/thamma/DMZ/warps/Warp.java" />
         <option value="$PROJECT_DIR$/src/me/thamma/DMZ/warps/WarpCommands.java" />
         <option value="$PROJECT_DIR$/src/me/thamma/DMZ/data/MItemStack.java" />
@@ -181,10 +185,12 @@
         <option value="$PROJECT_DIR$/src/me/thamma/DMZ/data/DataListener.java" />
         <option value="$PROJECT_DIR$/src/me/thamma/DMZ/Battle/MyItem.java" />
         <option value="$PROJECT_DIR$/src/me/thamma/DMZ/data/DataCommands.java" />
-        <option value="$PROJECT_DIR$/src/me/thamma/DMZ/chests/ChestListener.java" />
-        <option value="$PROJECT_DIR$/src/me/thamma/DMZ/core/Main.java" />
         <option value="$PROJECT_DIR$/src/me/thamma/DMZ/Battle/BattleListener.java" />
         <option value="$PROJECT_DIR$/src/me/thamma/DMZ/Chunky/ChunkyListener.java" />
+        <option value="$PROJECT_DIR$/src/me/thamma/DMZ/chests/ChestCommands.java" />
+        <option value="$PROJECT_DIR$/src/me/thamma/DMZ/core/Main.java" />
+        <option value="$PROJECT_DIR$/src/me/thamma/DMZ/chests/Chest.java" />
+        <option value="$PROJECT_DIR$/src/me/thamma/DMZ/chests/ChestListener.java" />
       </list>
     </option>
   </component>
@@ -256,7 +262,7 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -485,8 +491,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -822,7 +828,8 @@
       <workItem from="1435393538413" duration="2832000" />
       <workItem from="1435421408976" duration="12631000" />
       <workItem from="1435449397149" duration="5770000" />
-      <workItem from="1435485054919" duration="2895000" />
+      <workItem from="1435485054919" duration="2944000" />
+      <workItem from="1437054301521" duration="5779000" />
     </task>
     <task id="LOCAL-00001" summary="Started work on respawning chests">
       <created>1433865517962</created>
@@ -854,11 +861,17 @@
       <option name="project" value="LOCAL" />
       <updated>1435341472342</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="BattleListener, MyItem added, working as intended.">
+      <created>1435492198121</created>
+      <option name="number" value="00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1435492198121</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="135593000" />
+    <option name="totallyTimeSpent" value="141421000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
@@ -872,6 +885,7 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3299595" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16666667" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -880,14 +894,13 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32894737" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -917,7 +930,8 @@
     <MESSAGE value="Much more." />
     <MESSAGE value="Chunkys working properly, fixed running time issues. Added me.thamma.DMZ.Battle" />
     <MESSAGE value="BattleListener, MyItem added, working as intended." />
-    <option name="LAST_COMMIT_MESSAGE" value="BattleListener, MyItem added, working as intended." />
+    <MESSAGE value="Reworking respawning chests, Chest.fill() broken" />
+    <option name="LAST_COMMIT_MESSAGE" value="Reworking respawning chests, Chest.fill() broken" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -1158,9 +1172,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="69" column="60" selection-start-line="69" selection-start-column="60" selection-end-line="69" selection-end-column="60" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1190,7 +1201,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="59" column="31" selection-start-line="59" selection-start-column="31" selection-end-line="59" selection-end-column="31" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1214,7 +1224,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="7" column="52" selection-start-line="7" selection-start-column="52" selection-end-line="7" selection-end-column="52" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1222,7 +1231,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="47" column="37" selection-start-line="47" selection-start-column="37" selection-end-line="47" selection-end-column="37" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1238,8 +1246,8 @@
         <state vertical-scroll-proportion="0.33333334">
           <caret line="1036" column="30" selection-start-line="1036" selection-start-column="30" selection-end-line="1036" selection-end-column="30" />
           <folding>
-            <element signature="e#31058#31059#0" expanded="true" />
-            <element signature="e#31104#31105#0" expanded="true" />
+            <element signature="e#31058#31059#0" expanded="false" />
+            <element signature="e#31104#31105#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1248,7 +1256,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.123958334">
           <caret line="16" column="17" selection-start-line="16" selection-start-column="17" selection-end-line="16" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1268,40 +1275,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="51" column="20" selection-start-line="51" selection-start-column="20" selection-end-line="51" selection-end-column="20" />
           <folding>
-            <marker date="1435492174037" expanded="true" signature="36:698" placeholder="..." />
+            <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/thamma/DMZ/chests/ChestListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="16" column="66" selection-start-line="16" selection-start-column="66" selection-end-line="16" selection-end-column="66" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/thamma/DMZ/chests/ChestCommands.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="18" column="53" selection-start-line="18" selection-start-column="27" selection-end-line="18" selection-end-column="53" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/thamma/DMZ/chests/Chest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="39" column="12" selection-start-line="39" selection-start-column="11" selection-end-line="39" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/thamma/DMZ/core/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="29" column="64" selection-start-line="29" selection-start-column="64" selection-end-line="29" selection-end-column="64" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1310,7 +1285,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
           <folding>
-            <marker date="1435492172742" expanded="true" signature="38:296" placeholder="..." />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1319,19 +1294,61 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="163" column="9" selection-start-line="163" selection-start-column="9" selection-end-line="163" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#3202#3210#0" expanded="false" />
-            <element signature="e#3409#3417#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/me/thamma/DMZ/Chunky/ChunkyListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7342932">
-          <caret line="59" column="59" selection-start-line="59" selection-start-column="59" selection-end-line="59" selection-end-column="59" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="75" column="0" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/thamma/DMZ/core/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="36" column="27" selection-start-line="36" selection-start-column="27" selection-end-line="36" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/thamma/DMZ/chests/ChestCommands.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="22" column="0" selection-start-line="72" selection-start-column="43" selection-end-line="72" selection-end-column="46" />
+          <folding>
+            <marker date="1437062972289" expanded="true" signature="1631:1691" placeholder="{...}" />
+            <marker date="1437062972289" expanded="true" signature="1632:1690" placeholder="{...}" />
+            <marker date="1437062972289" expanded="true" signature="4397:4457" placeholder="{...}" />
+            <marker date="1437062972289" expanded="true" signature="4398:4456" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/thamma/DMZ/chests/Chest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="158" column="83" selection-start-line="158" selection-start-column="83" selection-end-line="158" selection-end-column="83" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#2106#2107#0" expanded="true" />
+            <element signature="e#2153#2154#0" expanded="true" />
+            <element signature="e#3661#3785#0" expanded="true" />
+            <element signature="e#3784#3785#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/thamma/DMZ/chests/ChestListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.64528793">
+          <caret line="38" column="61" selection-start-line="38" selection-start-column="61" selection-end-line="38" selection-end-column="61" />
+          <folding>
+            <element signature="e#534#535#0" expanded="true" />
+            <element signature="e#579#580#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
