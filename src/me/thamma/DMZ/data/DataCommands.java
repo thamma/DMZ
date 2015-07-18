@@ -189,10 +189,12 @@ public class DataCommands implements CommandExecutor {
                     } else {
                         active.add(p.getName());
                     }
-                }else {
-                    p.sendMessage("You must be holding an item to modify");
+                } else {
+                    p.sendMessage(Utils.color("&cYou must be holding an item to modify"));
             }
-        }//pl
+            } else {
+                sender.sendMessage("Data commands are no console commands!");
+            }
     }
 
     return true;

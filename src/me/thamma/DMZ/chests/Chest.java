@@ -14,16 +14,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static me.thamma.DMZ.core.Main.config;
+
 public class Chest {
 
     public static FileManager db = new FileManager("DMZ/chests.yml");
-    public static FileManager config = new FileManager("DMZ/config.yml");
 
     private Location loc;
     private int time;
     private int amount;
     private int id;
     private byte data;
+    private Material material;
 
     public Chest() {
         loc = new Location(Bukkit.getWorld("world"), 0, 0, 0);
@@ -39,28 +41,28 @@ public class Chest {
      * @param arg2 amount
      */
     public Chest(Location arg0, int arg1, int arg2) {
+        this.material = arg0.getBlock().getType();
         this.data = arg0.getBlock().getData();
         this.loc = arg0;
         this.time = arg1;
         this.amount = arg2;
         this.id = nextId();
-
         save();
     }
 
     public Chest(Location arg0, int arg1, int arg2, int arg3) {
+        this.material = arg0.getBlock().getType();
         this.data = arg0.getBlock().getData();
         this.loc = arg0;
         this.time = arg1;
         this.amount = arg2;
         this.id = arg3;
-
     }
 
     private static Chest loadChest(int id) {
         if (db.contains(String.valueOf(id))) {
             Location loc = db.getLocation(id + ".loc");
-            loc.getBlock().setType(Material.CHEST);
+            loc.getBlock().setType(Material.valueOf(db.getString(id + ".material")));
             loc.getBlock().setData((byte) db.getInt(id + ".data"));
             return new Chest(loc, db.getInt(id + ".time"), db.getInt(id + ".amount"), id);
         }
@@ -81,8 +83,9 @@ public class Chest {
     }
 
     public static boolean isChest(Location arg0) {
+        arg0.add(0.5, 0, 0.5);
         for (String s : db.getKeys("")) {
-            if (db.getLocation(s + ".loc").distance(arg0) < 1) {
+            if (db.getLocation(s + ".loc").equals(arg0)) {
                 //is chest
                 return true;
             }
@@ -121,7 +124,11 @@ public class Chest {
         return this.id;
     }
 
-    public Location getRemoteChest() {
+    public org.bukkit.block.Chest getRemoteChest() {
+        return ((org.bukkit.block.Chest) getRemoteLocation().getBlock().getState());
+    }
+
+    public Location getRemoteLocation() {
         Location ref = Utils.str2loc(config.getString(
                 "chest.constants.reference", "world;-729;74;390"));
         int x = config.getInt("chest.constants.vector.x", -2);
@@ -147,16 +154,25 @@ public class Chest {
         }, this.getTime() * 20L);
     }
 
+    private boolean isEmpty(ItemStack[] in) {
+        for (ItemStack is : in) {
+            if (is != null)
+                return false;
+        }
+        return true;
+    }
+
     public void fill() {
-        loc.getBlock().setType(Material.CHEST);
+        loc.getBlock().setType(this.material);
         loc.getBlock().setData(this.data);
+
         org.bukkit.block.Chest chest = (org.bukkit.block.Chest) loc.getBlock().getState();
-
         chest.getInventory().clear();
+        org.bukkit.block.Chest remote = (org.bukkit.block.Chest) getRemoteLocation().getBlock().getState();
 
-        org.bukkit.block.Chest remote = (org.bukkit.block.Chest) getRemoteChest().getBlock().getState();
+        if (isEmpty(remote.getInventory().getContents()))
+            return;
 
-        chest.getInventory().setContents(remote.getBlockInventory().getContents());
         Random r = new Random();
 
         List<ItemStack> common = new ArrayList<ItemStack>();
@@ -179,38 +195,41 @@ public class Chest {
                 rare.add(remote.getInventory().getItem(j));
         }
 
-        //select one itemstack from rarity class
-        for (int i = 0; i < this.amount; i++) { //fill chest
-            if (chest.getInventory().firstEmpty() == -1) break; //cheat already full
-
+        List<ItemStack> loot = new ArrayList<ItemStack>();
+        while (loot.size() < this.getAmount()) {
             int rarity = r.nextInt(100);
-            ItemStack item;
             if (rarity < 70) {
-                item = common.get(r.nextInt(common.size()));
+                if (common.size() > 0) {
+                    loot.add(common.get(r.nextInt(common.size())));
+                }
             } else if (rarity < 95) {
-                item = uncommon.get(r.nextInt(common.size()));
+                if (uncommon.size() > 0) {
+                    loot.add(uncommon.get(r.nextInt(uncommon.size())));
+                }
             } else {
-                item = rare.get(r.nextInt(common.size()));
+                if (rare.size() > 0) {
+                    loot.add(rare.get(r.nextInt(rare.size())));
+                }
             }
-
+        }
+        for (ItemStack is : loot) {
             int dest = r.nextInt(27);
-            //search free spot
-            System.out.println(chest.getInventory().getContents()[dest] == null);
             while (chest.getInventory().getContents()[dest] != null)
                 dest = r.nextInt(27);
-            chest.getInventory().setItem(dest, item);
+            chest.getInventory().setItem(dest, is);
         }
     }
 
 
     public void delete() {
         org.bukkit.block.Chest chest = (org.bukkit.block.Chest) loc.getBlock().getState();
-        chest.getInventory().setContents(((org.bukkit.block.Chest) (getRemoteChest().getBlock().getState())).getBlockInventory().getContents());
-        getRemoteChest().getBlock().setType(Material.AIR);
+        chest.getInventory().setContents(((org.bukkit.block.Chest) (getRemoteLocation().getBlock().getState())).getBlockInventory().getContents());
+        getRemoteLocation().getBlock().setType(Material.AIR);
         db.set(String.valueOf(this.id), null);
     }
 
     public void save() {
+        db.set(id + ".material", this.material.toString());
         db.set(id + ".data", this.data);
         db.set(id + ".loc", Utils.loc2str(loc));
         db.set(id + ".time", time);

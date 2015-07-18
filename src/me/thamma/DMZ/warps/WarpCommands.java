@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class WarpCommands implements CommandExecutor {
 
@@ -83,10 +84,56 @@ public class WarpCommands implements CommandExecutor {
                             "&e/warp &6set [name] &e- Sets a warp.",
                             "&e/warp &6del [name] &e- Deletes a warp.",
                             "&e/warp &6[name] &e- Teleports you to a warp.",
-                            "&e/warp &6[player] [name] &e- Teleports a player to a warp."});
+                            "&e/warp &6[player] [name] &e- Teleports a player to a warp.",
+                            "&e/warp &6random [player] [name] [name] &e- Teleports a player to a random warp."
+                    });
                 }
             } else {
-                sender.sendMessage("This is an ingame-only command");
+                if (Utils.matchArgs("#string #string", args)) {
+                    if (Warp.getWarps().contains(args[1])) {
+                        Location loc = Utils.str2loc(Warp.db
+                                .getString(args[1]));
+
+                        Player q = Bukkit.getPlayer(args[0]);
+                        if (q != null) {
+                            q.teleport(loc);
+                            sender.sendMessage("Teleported " + q.getName() +
+                                    " to warp " + args[1] + ".");
+                        } else {
+                            sender.sendMessage("" + args[0] + " is not online.");
+                        }
+                    } else {
+                        sender.sendMessage("The warp " + args[1] +
+                                " does not exist.");
+                    }
+                } else if (Utils.matchArgs("random #string #string #string", args)) {
+                    if (Warp.getWarps().contains(args[2]) && Warp.getWarps().contains(args[2])) {
+                        Location warp1 = Utils.str2loc(Warp.db
+                                .getString(args[2]));
+                        Location warp2 = Utils.str2loc(Warp.db
+                                .getString(args[3]));
+                        Player q = Bukkit.getPlayer(args[1]);
+                        if (q != null) {
+                            Random r = new Random();
+                            if (r.nextBoolean()) {
+                                q.teleport(warp1);
+                                sender.sendMessage("Teleported " + q.getName() +
+                                        " to warp " + args[2] + ".");
+                            } else {
+                                q.teleport(warp2);
+                                sender.sendMessage("Teleported " + q.getName() +
+                                        " to warp " + args[3] + ".");
+                            }
+                        } else {
+                            sender.sendMessage("" + args[1] + " is not online.");
+                        }
+                    } else {
+                        sender.sendMessage("The warp " + args[2] +
+                                " does not exist.");
+                    }
+                } else {
+                    sender.sendMessage("This is an ingame-only command");
+                }
             }
         }
         return true;

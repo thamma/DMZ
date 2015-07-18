@@ -1,5 +1,7 @@
 package me.thamma.DMZ.data;
 
+import me.thamma.DMZ.ArmorEquipEvent;
+import me.thamma.DMZ.Battle.MyItem;
 import me.thamma.DMZ.utils.Task;
 import me.thamma.DMZ.utils.Utils;
 import org.bukkit.ChatColor;
@@ -81,5 +83,15 @@ public class DataListener implements Listener {
                         }
     }
 
+    @EventHandler
+    public void onArmorEquip(ArmorEquipEvent e) {
+        ItemStack is = e.getNewArmorPiece();
+        MyItem mi = new MyItem(is);
+        if (e.getPlayer().getLevel() < mi.getLevel()) {
+            e.setCancelled(true);
+            e.getPlayer().sendMessage(Utils.color("&cYour level is too low to equip that."));
+            e.getPlayer().updateInventory();
+        }
+    }
 
 }

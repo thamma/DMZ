@@ -2,7 +2,7 @@ package me.thamma.DMZ.chests;
 
 import me.thamma.DMZ.utils.FileManager;
 import me.thamma.DMZ.utils.Utils;
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -28,7 +28,7 @@ public class ChestCommands implements CommandExecutor {
         String[] out = new String[args.length / 2 + 1];
         out[0] = title;
         for (int i = 0; i < args.length / 2; i++) {
-            out[i + 1] = Utils.color("&e/" + command + " &6" + args[i] + " &e - " + args[i + 1]);
+            out[i + 1] = Utils.color("&e/" + command + " &6" + args[2 * i] + " &e - " + args[2 * i + 1]);
         }
         return out;
 
@@ -38,7 +38,10 @@ public class ChestCommands implements CommandExecutor {
         if ((cmd.getName().equalsIgnoreCase("chest")) &&
                 ((sender instanceof Player))) {
             Player p = (Player) sender;
-            if (Utils.matchArgs("create #int #int", args)) {
+            if (Utils.matchArgs("respawn", args)) {
+                Chest.respawnAll();
+                p.sendMessage(Utils.color("&eRespawned all respawning chests."));
+            } else if (Utils.matchArgs("create #int #int", args)) {
                 int amount = Integer.parseInt(args[1]);
                 int time = Integer.parseInt(args[2]);
                 Block target = p.getTargetBlock(new HashSet<Material>() {{
@@ -46,9 +49,7 @@ public class ChestCommands implements CommandExecutor {
                 }}, 10);
 
                 if (((target != null) &&
-
                         (target.getType().equals(Material.CHEST))) ||
-
                         (target.getType().equals(Material.TRAPPED_CHEST))) {
 
                     if (Chest.isChest(target.getLocation())) {
@@ -64,11 +65,11 @@ public class ChestCommands implements CommandExecutor {
                             }
                         }
                         if (empty) {
-                            p.sendMessage("This chest is empty, so it wont respawn anything!");
+                            p.sendMessage("This chest is empty, so it wouldn't respawn anything!");
                         } else {
                             //create chest
                             me.thamma.DMZ.chests.Chest vChest = new Chest(chestBlock.getLocation(), time, amount);
-                            Location ref = vChest.getRemoteChest();
+                            Location ref = vChest.getRemoteLocation();
 
                             ref.getBlock().setType(Material.CHEST);
                             ref.getBlock().setData((byte) 5);
@@ -94,6 +95,21 @@ public class ChestCommands implements CommandExecutor {
                 } else {
                     p.sendMessage(ChatColor.RED + "You must be facing a chest.");
                 }
+            } else if (Utils.matchArgs("edit", args)) {
+                Block target = p.getTargetBlock(new HashSet<Material>() {{
+                    add(Material.AIR);
+                }}, 10);
+                if (((target != null) &&
+                        (target.getType().equals(Material.CHEST))) ||
+                        (target.getType().equals(Material.TRAPPED_CHEST))) {
+                    if (Chest.isChest(target)) {
+                        p.openInventory(Chest.getChest(target.getLocation()).getRemoteChest().getInventory());
+                    } else {
+                        p.sendMessage(org.bukkit.ChatColor.RED + "This is no respawning chest.");
+                    }
+                } else {
+                    p.sendMessage(ChatColor.RED + "You must be facing a chest.");
+                }
             } else if (Utils.matchArgs("delete", args) || Utils.matchArgs("remove", args)) {
                 Block target = p.getTargetBlock(new HashSet<Material>() {{
                     add(Material.AIR);
@@ -114,7 +130,7 @@ public class ChestCommands implements CommandExecutor {
 
             } else {
                 p.sendMessage(
-                        helpPage("chest", "create [amount] [time]", "Creates a respawning chest.", "delete", "Deletes the chest you are facing.")
+                        helpPage("chest", "create [amount] [time]", "Creates a respawning chest.", "delete", "Deletes the chest you are facing.", "edit", "Edits the chest you are facing.", "respawn", "Respawns all respawning chests.")
                 );
 
             }
