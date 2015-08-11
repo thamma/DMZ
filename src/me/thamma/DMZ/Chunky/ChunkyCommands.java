@@ -53,26 +53,27 @@ public class ChunkyCommands implements CommandExecutor {
                     } catch (Exception e) {
                         p.sendMessage("No such attribute");
                     }
-                } else if (Utils.matchArgs("help", args) || Utils.matchArgs("", args)) {
-                    p.sendMessage("att, att <attribute>, att <attribute> <value>, map <attribute>, save" +
-                            "");
                 } else if (Utils.matchArgs("save", args)) {
                     Chunky.saveAll();
                 } else if (Utils.matchArgs("map #String", args)) {
-                    try {
+                    //try {
                         Attribute a = Attribute.valueOf(args[1]);
                         c.print(p, a);
-                    } catch (Exception e) {
-                        p.sendMessage("No such attribute");
-                    }
+                    // } catch (Exception e) {
+                    //   p.sendMessage("No such attribute");
+                    //}
                 } else if (Utils.matchArgs("map #String #int", args)) {
                     try {
                         Attribute a = Attribute.valueOf(args[1]);
                         c.print(p, a, Integer.parseInt(args[2]));
                     } catch (Exception e) {
                         p.sendMessage("No such attribute");
+                    }
+                } else {
+                    p.sendMessage("att, att <attribute>, att <attribute> <value>, map <attribute>, save" +
+                            "");
                 }
-                }
+
             }
         }
         return true;

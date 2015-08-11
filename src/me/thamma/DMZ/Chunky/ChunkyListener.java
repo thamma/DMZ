@@ -10,7 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,46 +56,36 @@ public class ChunkyListener implements Listener {
     public void onSpawn(CreatureSpawnEvent e) {
         if (e.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.SPAWNER_EGG))
             return;
-        for (Entity en : e.getEntity().getNearbyEntities(20, 20, 20)) {
-            if (en.getType().equals(EntityType.PLAYER)) {
-                e.setCancelled(true);
+        if (e.getEntity().getType().equals(EntityType.ZOMBIE))
+            for (Entity en : e.getEntity().getNearbyEntities(20, 20, 20)) {
+                if (en.getType().equals(EntityType.PLAYER)) {
+                    e.setCancelled(true);
+                }
             }
-        }
 
         Location loc = e.getLocation();
         Chunky c = new Chunky(e.getLocation());
-        if (c.getAttribute(Attribute.Mobspawn).equals("false")) {
-            if (hostiles.contains(e.getEntity().getType())) {
-                e.setCancelled(true);
-            }
-        } else {
-            if (!e.getEntityType().equals(EntityType.ZOMBIE)) {
-                e.setCancelled(true);
+        if (e.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.NATURAL))
+            if (c.getAttribute(Attribute.Mobspawn).equals("false")) {
+                if (hostiles.contains(e.getEntity().getType())) {
+                    e.setCancelled(true);
+                }
             } else {
+                if (!e.getEntityType().equals(EntityType.ZOMBIE)) {
+                    e.setCancelled(true);
+                } else {
 
-                Zombie z = (Zombie) e.getEntity();
-                int level = Integer.parseInt(c.getAttribute(Attribute.Level));
-                z.setCustomName("Zombie Lv." + level);
-                z.setMaxHealth(BattleListener.healthAtLevel(level));
-                z.setHealth(z.getMaxHealth());
-                z.setCustomNameVisible(true);
+                    Zombie z = (Zombie) e.getEntity();
+                    int level = Integer.parseInt(c.getAttribute(Attribute.Level));
+                    z.setCustomName("Zombie Lv." + level);
+                    z.setMaxHealth(BattleListener.healthAtLevel(level));
+                    z.setHealth(z.getMaxHealth());
+                    z.setCustomNameVisible(true);
+                }
             }
-        }
     }
 
     @EventHandler
-    public void onMove(PlayerMoveEvent e) {
-        Player p = e.getPlayer();
-        Chunky c = new Chunky(p.getLocation());
-        if (lastChunk.containsKey(p.getName())) {
-            if (!lastChunk.get(p.getName()).equals(c.path())) {
-                onChunkyChange(new ChunkyChangeEvent(p, new Chunky(lastChunk.get(p.getName())), c));
-                lastChunk.put(p.getName(), c.path());
-            }
-        } else {
-            lastChunk.put(p.getName(), c.path());
-        }
-    }
 
     public void onChunkyChange(ChunkyChangeEvent e) {
         Player p = e.getPlayer();
@@ -107,7 +96,7 @@ public class ChunkyListener implements Listener {
                 p.sendMessage("Set attribute " + s.getAttribute().name() + " to " + s.getValue() + " for this chunky");
             }
             p.sendMessage("Remember to turn the runset off once youre done using /chunky runset");
-            e.getTo().print(p, s.getAttribute());
+            e.getTo().print(p, s.getAttribute(), 6);
         }
     }
 

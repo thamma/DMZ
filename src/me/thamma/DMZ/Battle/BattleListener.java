@@ -1,9 +1,6 @@
 package me.thamma.DMZ.Battle;
 
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Zombie;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -32,20 +29,27 @@ public class BattleListener implements Listener {
     public void onDamage(EntityDamageByEntityEvent e) {
         Entity damaged = e.getEntity();
         Entity damager = e.getDamager();
-
         int dmg = 0;
-        if (damager.getType().equals(EntityType.PLAYER)) {
-            Player p = (Player) damager;
-            if (!p.getItemInHand().equals(null)) {
-                MyItem is = new MyItem(p.getItemInHand());
-                dmg = is.getEnchantmentLevel(MyItem.EnchantmentType.Damage) * 5;
-            }
-        } else if (damager.getType().equals(EntityType.ZOMBIE)) {
-            Zombie z = (Zombie) damager;
-            if (z.getCustomName().startsWith("Zombie Lv.")) {
-                Integer level = Integer.parseInt(z.getCustomName().replaceFirst("Zombie Lv.", ""));
+        if (e.getDamager() instanceof LivingEntity && e.getEntity() instanceof LivingEntity) {
+            MyLiving d1 = new MyLiving((LivingEntity) damaged);
+            MyLiving d2 = new MyLiving((LivingEntity) damager);
 
-                dmg = 5 * level;
+            dmg = d2.attack(d1);
+
+
+            if (damager.getType().equals(EntityType.PLAYER)) {
+                Player p = (Player) damager;
+                if (!p.getItemInHand().equals(null)) {
+                    MyItem is = new MyItem(p.getItemInHand());
+                    dmg = is.getEnchantmentLevel(MyItem.MyEnchantmentType.Damage) * 5;
+                }
+            } else if (damager.getType().equals(EntityType.ZOMBIE)) {
+                Zombie z = (Zombie) damager;
+                if (z.getCustomName().startsWith("Zombie Lv.")) {
+                    Integer level = Integer.parseInt(z.getCustomName().replaceFirst("Zombie Lv.", ""));
+
+                    dmg = 5 * level;
+                }
             }
         }
         e.setDamage(dmg);

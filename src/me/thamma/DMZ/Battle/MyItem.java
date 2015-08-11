@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -27,6 +28,7 @@ public class MyItem {
     private List<MyEnchantment> myenchants;
     private Map<Enchantment, Integer> enchants;
     private String name;
+    private boolean unbreakable;
 
     public MyItem(Material arg0) {
         this(arg0, 1, (short) 0);
@@ -44,6 +46,7 @@ public class MyItem {
         this.myenchants = new ArrayList<MyEnchantment>();
         this.enchants = new HashMap<Enchantment, Integer>();
         this.name = "";
+        this.unbreakable = false;
     }
 
     public MyItem(ItemStack is) {
@@ -55,6 +58,7 @@ public class MyItem {
         this.myenchants = new ArrayList<MyEnchantment>();
         this.enchants = is.getEnchantments();
         if (is.hasItemMeta()) {
+            this.unbreakable = im.spigot().isUnbreakable();
             if (is.getItemMeta().hasDisplayName())
                 this.name = is.getItemMeta().getDisplayName();
             if (is.getItemMeta().hasLore())
@@ -64,7 +68,7 @@ public class MyItem {
                         this.level = Integer.parseInt(line.replaceFirst("Level: ", ""));
                     } else if (line.startsWith("+") || line.startsWith("-")) {
                         int lv = Integer.parseInt(line.split(" ")[0]);
-                        EnchantmentType e = EnchantmentType.valueOf(line.split(" ")[1]);
+                        MyEnchantmentType e = MyEnchantmentType.valueOf(line.split(" ")[1]);
                         myenchants.add(new MyEnchantment(e, lv));
                     } else {
                         this.lore.add(line);
@@ -72,16 +76,40 @@ public class MyItem {
 
                 }
         }
-        //this.is = new ItemStack(is.getType(), is.getAmount(), is.getDurability());
     }
 
-    public int getEnchantmentLevel(EnchantmentType type) {
+    public static void updateItems(Player p) {
+        for (int i = 0; i < p.getInventory().getContents().length; i++) {
+            if (p.getInventory().getContents()[i] != null) {
+                p.getInventory().setItem(i, new MyItem(p.getInventory().getContents()[i]).getItemStack());
+            }
+        }
+    }
+
+    public int getEnchantmentLevel(Enchantment type) {
+        for (Enchantment e : enchants.keySet()) {
+            if (e.equals(type)) {
+                return enchants.get(e);
+            }
+        }
+        return 0;
+    }
+
+    public int getEnchantmentLevel(MyEnchantmentType type) {
         for (MyEnchantment e : myenchants) {
             if (e.getType().equals(type)) {
                 return e.getLevel();
             }
         }
         return 0;
+    }
+
+    public boolean isUnbreakable() {
+        return this.unbreakable;
+    }
+
+    public void setUnbreakable(boolean arg0) {
+        this.unbreakable = arg0;
     }
 
     public int getLevel() {
@@ -104,7 +132,7 @@ public class MyItem {
         return this.lore;
     }
 
-    public void setLore(List<String> arg0) {
+    public void setLore(String[] arg0) {
         ArrayList<String> l = new ArrayList<String>();
         for (String s : arg0) {
             l.add(Utils.color(s));
@@ -112,7 +140,7 @@ public class MyItem {
         this.lore = l;
     }
 
-    public void setLore(String[] arg0) {
+    public void setLore(List<String> arg0) {
         ArrayList<String> l = new ArrayList<String>();
         for (String s : arg0) {
             l.add(Utils.color(s));
@@ -162,18 +190,19 @@ public class MyItem {
         for (MyEnchantment e : this.myenchants) {
             l.add(Utils.color(e.toString()));
         }
+        im.spigot().setUnbreakable(this.unbreakable);
         im.setLore(l);
         is.addEnchantments(enchants);
         is.setItemMeta(this.im);
         return is;
     }
 
-    public enum EnchantmentType {
+    public enum MyEnchantmentType {
         Damage(ChatColor.GOLD), Armor(ChatColor.GOLD), Poison(ChatColor.GREEN), Swiftness(ChatColor.AQUA);
 
         private ChatColor c;
 
-        EnchantmentType(ChatColor arg0) {
+        MyEnchantmentType(ChatColor arg0) {
             this.c = arg0;
         }
 
@@ -188,10 +217,10 @@ public class MyItem {
 
     public static class MyEnchantment {
 
-        private EnchantmentType e;
+        private MyEnchantmentType e;
         private int l;
 
-        public MyEnchantment(EnchantmentType arg0, int arg1) {
+        public MyEnchantment(MyEnchantmentType arg0, int arg1) {
             this.e = arg0;
             this.l = arg1;
         }
@@ -201,7 +230,7 @@ public class MyItem {
             return "" + this.getType().getColor() + (this.getLevel() >= 0 ? "+" : "-") + this.getLevel() + " " + this.getType().getDisplayName();
         }
 
-        public EnchantmentType getType() {
+        public MyEnchantmentType getType() {
             return this.e;
         }
 

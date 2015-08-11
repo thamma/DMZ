@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_dmz" default="compile.module.dmz">
+    <dirname property="module.dmz.basedir" file="${ant.file.module_dmz}"/>
+
+    <property name="module.jdk.home.dmz" value="${project.jdk.home}"/>
+    <property name="module.jdk.bin.dmz" value="${project.jdk.bin}"/>
+    <property name="module.jdk.classpath.dmz" value="${project.jdk.classpath}"/>
+
+    <property name="compiler.args.dmz" value="-encoding windows-1252 -source 1.7 ${compiler.args}"/>
+
+    <property name="dmz.output.dir" value="${module.dmz.basedir}/out/production/DMZ"/>
+    <property name="dmz.testoutput.dir" value="${module.dmz.basedir}/out/test/DMZ"/>
+
+    <path id="dmz.module.bootclasspath">
+        <!-- Paths to be included in compilation bootclasspath -->
+    </path>
+
+    <path id="dmz.module.production.classpath">
+        <path refid="${module.jdk.classpath.dmz}"/>
+        <fileset dir="${basedir}/../../Documents/GitHub/Spigot">
+            <patternset refid="library.patterns"/>
+        </fileset>
+    </path>
+
+    <path id="dmz.runtime.production.module.classpath">
+        <pathelement location="${dmz.output.dir}"/>
+        <fileset dir="${basedir}/../../Documents/GitHub/Spigot">
+            <patternset refid="library.patterns"/>
+        </fileset>
+    </path>
+
+    <path id="dmz.module.classpath">
+        <path refid="${module.jdk.classpath.dmz}"/>
+        <pathelement location="${dmz.output.dir}"/>
+        <fileset dir="${basedir}/../../Documents/GitHub/Spigot">
+            <patternset refid="library.patterns"/>
+        </fileset>
+    </path>
+
+    <path id="dmz.runtime.module.classpath">
+        <pathelement location="${dmz.testoutput.dir}"/>
+        <pathelement location="${dmz.output.dir}"/>
+        <fileset dir="${basedir}/../../Documents/GitHub/Spigot">
+            <patternset refid="library.patterns"/>
+        </fileset>
+    </path>
+
+
+    <patternset id="excluded.from.module.dmz">
+        <patternset refid="ignored.files"/>
+    </patternset>
+
+    <patternset id="excluded.from.compilation.dmz">
+        <patternset refid="excluded.from.module.dmz"/>
+    </patternset>
+
+    <path id="dmz.module.sourcepath">
+        <dirset dir="${module.dmz.basedir}">
+            <include name="src"/>
+        </dirset>
+    </path>
+
+
+    <target name="compile.module.dmz" depends="compile.module.dmz.production,compile.module.dmz.tests"
+            description="Compile module DMZ"/>
+
+    <target name="compile.module.dmz.production" depends="register.custom.compilers"
+            description="Compile module DMZ; production classes">
+        <mkdir dir="${dmz.output.dir}"/>
+        <javac2 destdir="${dmz.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}"
+                memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.dmz}/javac">
+            <compilerarg line="${compiler.args.dmz}"/>
+            <bootclasspath refid="dmz.module.bootclasspath"/>
+            <classpath refid="dmz.module.production.classpath"/>
+            <src refid="dmz.module.sourcepath"/>
+            <patternset refid="excluded.from.compilation.dmz"/>
+        </javac2>
+
+        <copy todir="${dmz.output.dir}">
+            <fileset dir="${module.dmz.basedir}/src">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="compile.module.dmz.tests" depends="register.custom.compilers,compile.module.dmz.production"
+            description="compile module DMZ; test classes" unless="skip.tests"/>
+
+    <target name="clean.module.dmz" description="cleanup module">
+        <delete dir="${dmz.output.dir}"/>
+        <delete dir="${dmz.testoutput.dir}"/>
+    </target>
+</project>

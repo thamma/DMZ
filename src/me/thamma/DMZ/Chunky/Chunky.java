@@ -46,7 +46,7 @@ public class Chunky {
         for (String key : db.getKeys("")) {
             HashMap<Attribute, String> temp = new HashMap<Attribute, String>();
             for (Attribute a : Attribute.values()) {
-                String s = db.getString(key + "." + a.toString(), db.getString(key + "." + a.toString()));
+                String s = db.getString(key + "." + a.toString(), a.getDefaultValue());
                 temp.put(a, s);
             }
             cache.put(key, temp);
@@ -56,11 +56,12 @@ public class Chunky {
     }
 
     public static void saveAll() {
-        Bukkit.broadcastMessage("Saving chunkys. This might take some time.");
+        Bukkit.broadcastMessage("Saving chunkys. This might take some time. [" + updated.size() + "]");
         for (String s : updated) {
             Chunky c = new Chunky(s);
             c.save();
         }
+        updated.clear();
         Bukkit.broadcastMessage("Saving complete!");
     }
 
@@ -69,14 +70,13 @@ public class Chunky {
     }
 
     public void newEntry() {
-        //Bukkit.broadcastMessage("new entry: " + this.path());
         HashMap<Attribute, String> temp = new HashMap<Attribute, String>();
         for (Attribute a : Attribute.values()) {
             temp.put(a, a.getDefaultValue());
         }
-        updated.add(this.path());
+        //updated.add(this.path());
         cache.put(this.path(), temp);
-        save();
+        //save();
     }
 
     public String path() {
@@ -94,15 +94,19 @@ public class Chunky {
         HashMap<Attribute, String> temp = cache.get(this.path());
         temp.put(a, val);
         cache.put(this.path(), temp);
-        updated.add(this.path());
+        if (!updated.contains(this.path()))
+            updated.add(this.path());
         save();
     }
 
     public void print(Player p, Attribute a, int cap) {
         Chunk chunk = p.getLocation().getChunk();
-        String m = "";
+
+        List<String> out = new ArrayList<String>();
+        List<String> keys = new ArrayList<String>();
+        char[] res = {'a', 'b', 'c', 'd', 'e', '3', '4', '5', '9'};
         for (int i = chunk.getZ() - cap + 1; i < chunk.getZ() + cap; i++) {
-            m = "";
+            String m = "";
             if (i == chunk.getZ() - cap + 1) {
                 m = "N";
             } else if (i == chunk.getZ() + cap - 1) {
@@ -113,26 +117,41 @@ public class Chunky {
 
             for (int j = chunk.getX() - cap + 1; j < chunk.getX() + cap; j++) {
                 Chunky temp = new Chunky(j, i);
-                boolean bool = false;
-                if (temp.getAttribute(a).equals("true")) {
-                    m += "&a";
-                    bool = true;
-                } else if (temp.getAttribute(a).equals("false")) {
-                    m += "&c";
-                    bool = true;
-                }
-                if (j == chunk.getX() && i == chunk.getZ()) {
-                    m += "I" + (!bool ? temp.getAttribute(a) : "") + "I";
+                if (a.getDefaultValue().equals("true") || a.getDefaultValue().equals("false")) {
+                    boolean bool = false;
+                    if (temp.getAttribute(a).equals("true")) {
+                        m += "&a";
+                        bool = true;
+                    } else if (temp.getAttribute(a).equals("false")) {
+                        m += "&c";
+                        bool = true;
+                    }
+                    if (j == chunk.getX() && i == chunk.getZ()) {
+                        m += "II";
+                    } else
+                        m += "[]";
                 } else {
-                    m += "[" + (!bool ? temp.getAttribute(a) : "") + "]";
+                    if (!keys.contains(temp.getAttribute(a)))
+                        keys.add(temp.getAttribute(a));
+
+                    String color = "&" + res[(Math.abs(temp.getAttribute(a).hashCode()) % res.length)];
+                    if (j == chunk.getX() && i == chunk.getZ()) {
+                        m += color + "II";
+                    } else
+                        m += color + "[]";
                 }
             }
-            p.sendMessage(Utils.color(m));
+            out.add(m);
         }
+        if (!(a.getDefaultValue().equals("true") || a.getDefaultValue().equals("false")))
+            for (String s : keys)
+                p.sendMessage(Utils.color("&" + res[Math.abs(s.hashCode()) % res.length]) + s);
+        for (String m : out)
+            p.sendMessage(Utils.color(m));
     }
 
     public void print(Player p, Attribute a) {
-        print(p, a, 4);
+        print(p, a, 5);
     }
 
     public String getAttribute(Attribute a) {

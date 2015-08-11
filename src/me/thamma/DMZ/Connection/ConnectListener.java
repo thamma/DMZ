@@ -1,5 +1,6 @@
 package me.thamma.DMZ.Connection;
 
+import me.thamma.DMZ.utils.FileManager;
 import me.thamma.DMZ.utils.Utils;
 import me.thamma.DMZ.warps.Warp;
 import org.bukkit.Bukkit;
@@ -36,8 +37,9 @@ public class ConnectListener implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         e.setJoinMessage(Utils.color("&e" + levelString(e.getPlayer()) + "&e joined the game"));
         if (!e.getPlayer().hasPlayedBefore()) {
+            e.getPlayer().setLevel(1);
             e.getPlayer().setGameMode(GameMode.ADVENTURE);
-            e.getPlayer().teleport(Warp.getWarp("firstspawn"));
+            e.getPlayer().teleport(Warp.getWarp("spawn"));
             Location loc = config.getLocation("firstspawn.inventory", new Location(Bukkit.getWorld("world"), -2, 1, -3));
             if (loc.getBlock().getType().equals(Material.CHEST)) {
                 Chest c = (Chest) loc.getBlock().getState();
@@ -53,6 +55,15 @@ public class ConnectListener implements Listener {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {
-        e.setFormat(Utils.color(levelString(e.getPlayer()) + ":  &f" + e.getMessage()));
+        FileManager db = new FileManager("DMZ/players/" + e.getPlayer().getName().toLowerCase() + ".yml");
+        String medal = db.getString("medal", "");
+        if (medal != "")
+            medal = "&f[" + medal + "&f] ";
+        String op = "";
+        if (e.getPlayer().isOp())
+            op = "&f[&cA&f]&r";
+        String out = "&f[&eLv. " + levelColor(e.getPlayer().getLevel()) + e.getPlayer().getLevel() + "&f] &7" + medal + "&7" + e.getPlayer().getName() + "&r: " + e.getMessage();
+        e.setFormat(Utils.color(out));
+        //e.setFormat(Utils.color(levelString(e.getPlayer()) + ":  &f" + e.getMessage()));
     }
 }

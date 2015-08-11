@@ -1,4 +1,4 @@
-package me.thamma.DMZ;
+package me.thamma.DMZ.Battle;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;

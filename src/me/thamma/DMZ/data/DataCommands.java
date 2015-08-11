@@ -45,8 +45,26 @@ public class DataCommands implements CommandExecutor {
         if (cmd.getName().equalsIgnoreCase("data")) {
             if ((sender instanceof Player)) {
                 Player p = (Player) sender;
-                if (Utils.matchArgs("ac", args)) {
-                    Chest c = (Chest) ((new Location(Bukkit.getWorld("world"),0,0,0).getBlock().getState()));
+                if (Utils.matchArgs("enchant", args)) {
+                    for (MyItem.MyEnchantmentType et : MyItem.MyEnchantmentType.values()) {
+                        p.sendMessage("-" + et.getColor() + et.toString());
+                    }
+                } else if (Utils.matchArgs("enchant #string #int", args)) {
+                    try {
+                        MyItem.MyEnchantmentType et = MyItem.MyEnchantmentType.valueOf(args[1]);
+                        MyItem.MyEnchantment myench = new MyItem.MyEnchantment(et, Integer.parseInt(args[2]));
+                        if (p.getItemInHand() != null) {
+                            MyItem mi = new MyItem(p.getItemInHand());
+                            mi.addEnchantment(myench);
+                            p.setItemInHand(mi.getItemStack());
+                        } else {
+                            p.sendMessage("No item in hand!");
+                        }
+                    } catch (Exception e) {
+                        p.sendMessage("No such enchant");
+                    }
+                } else if (Utils.matchArgs("ac", args)) {
+                    Chest c = (Chest) ((new Location(Bukkit.getWorld("world"), 0, 0, 0).getBlock().getState()));
                     p.openInventory(c.getBlockInventory());
                 } else if (Utils.matchArgs("update", args)) {
                     p.setHealthScaled(true);
@@ -55,8 +73,8 @@ public class DataCommands implements CommandExecutor {
                     p.setHealth(p.getMaxHealth());
                     MyItem is = new MyItem(Material.WOOD_SWORD);
                     is.setName("&aKokiri Sword");
-                    is.addEnchantment(new MyItem.MyEnchantment(MyItem.EnchantmentType.Damage, 3));
-                    is.addEnchantment(new MyItem.MyEnchantment(MyItem.EnchantmentType.Poison, 2));
+                    is.addEnchantment(new MyItem.MyEnchantment(MyItem.MyEnchantmentType.Damage, 3));
+                    is.addEnchantment(new MyItem.MyEnchantment(MyItem.MyEnchantmentType.Poison, 2));
                     is.setLevel(3);
                     is.setLore(new String[]{"Totally not stolen from Link."});
                     p.getInventory().addItem(is.getItemStack());
@@ -64,19 +82,30 @@ public class DataCommands implements CommandExecutor {
                     IconMenu menu = new IconMenu("Admin toolbar", 27, new IconMenu.OptionClickEventHandler() {
                         @Override
                         public void onOptionClick(IconMenu.OptionClickEvent e) {
-                            switch(e.getPosition()) {
-                                case 0:e.getPlayer().setGameMode(GameMode.SURVIVAL);break;
-                                case 9:e.getPlayer().setGameMode(GameMode.CREATIVE);break;
-                                case 18:e.getPlayer().setGameMode(GameMode.SPECTATOR);break;
-                                case 12:e.getPlayer().setHealth(e.getPlayer().getMaxHealth());break;
-                                case 13:e.getPlayer().setFoodLevel(20);e.getPlayer().setExhaustion(1F);break;
+                            switch (e.getPosition()) {
+                                case 0:
+                                    e.getPlayer().setGameMode(GameMode.SURVIVAL);
+                                    break;
+                                case 9:
+                                    e.getPlayer().setGameMode(GameMode.CREATIVE);
+                                    break;
+                                case 18:
+                                    e.getPlayer().setGameMode(GameMode.SPECTATOR);
+                                    break;
+                                case 12:
+                                    e.getPlayer().setHealth(e.getPlayer().getMaxHealth());
+                                    break;
+                                case 13:
+                                    e.getPlayer().setFoodLevel(20);
+                                    e.getPlayer().setExhaustion(1F);
+                                    break;
                                 case 14:
                                     Bukkit.broadcastMessage("Called");
                                     if (e.getPlayer().hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
-                                    e.getPlayer().removePotionEffect(PotionEffectType.NIGHT_VISION);
+                                        e.getPlayer().removePotionEffect(PotionEffectType.NIGHT_VISION);
                                         Bukkit.broadcastMessage("removed");
-                                } else {
-                                    e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 500000, 0));
+                                    } else {
+                                        e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 500000, 0));
                                         Bukkit.broadcastMessage("added");
                                     }
                                     break;
@@ -112,6 +141,11 @@ public class DataCommands implements CommandExecutor {
                         p.sendMessage("Your chat is now disabled due to the current task. Type \'Done.\' when you're done. (1)");
                         tasks.put(p.getName(), new Task() {
                             @Override
+                            public int getAmount() {
+                                return -1;
+                            }
+
+                            @Override
                             public void run(ArrayList<String> l, Player p) {
                                 ItemStack is = p.getItemInHand();
                                 if (is != null) {
@@ -127,6 +161,11 @@ public class DataCommands implements CommandExecutor {
                         p.sendMessage("Your chat is now disabled due to the current task. Type \'Done.\' when you're done. (2)");
                         tasks.put(p.getName(), new Task() {
                             @Override
+                            public int getAmount() {
+                                return -1;
+                            }
+
+                            @Override
                             public void run(ArrayList<String> l, Player p) {
                                 ItemStack is = p.getItemInHand();
                                 if (is != null) {
@@ -139,9 +178,14 @@ public class DataCommands implements CommandExecutor {
                                 }
                             }
                         });
-                    }else if (Utils.matchArgs("setname", args)) {
+                    } else if (Utils.matchArgs("setname", args)) {
                         p.sendMessage("Your chat is now disabled due to the current task. Type \'Done.\' when you're done.");
                         tasks.put(p.getName(), new Task() {
+                            @Override
+                            public int getAmount() {
+                                return 1;
+                            }
+
                             @Override
                             public void run(ArrayList<String> l, Player p) {
                                 ItemStack is = p.getItemInHand();
@@ -157,6 +201,11 @@ public class DataCommands implements CommandExecutor {
                         p.sendMessage("Your chat is now disabled due to the current task. Type \'Done.\' when you're done.");
                         tasks.put(p.getName(), new Task() {
                             @Override
+                            public int getAmount() {
+                                return -1;
+                            }
+
+                            @Override
                             public void run(ArrayList<String> l, Player p) {
                                 ItemStack is = p.getItemInHand();
                                 if (is != null) {
@@ -171,11 +220,15 @@ public class DataCommands implements CommandExecutor {
                         p.sendMessage("Your chat is now disabled due to the current task. Type \'Done.\' when you're done.");
                         tasks.put(p.getName(), new Task() {
                             @Override
+                            public int getAmount() {
+                                return -1;
+                            }
+
+                            @Override
                             public void run(ArrayList<String> l, Player p) {
                                 ItemStack is = new ItemStack(Material.NAME_TAG);
                                 ItemMeta im = is.getItemMeta();
-                                im.setDisplayName(Utils.color(l.get(0)));
-                                l.remove(0);
+                                im.setDisplayName(Utils.color(l.remove(0)));
                                 im.setLore(l);
                                 is.setItemMeta(im);
                                 p.getInventory().addItem(is);
@@ -191,12 +244,12 @@ public class DataCommands implements CommandExecutor {
                     }
                 } else {
                     p.sendMessage(Utils.color("&cYou must be holding an item to modify"));
-            }
+                }
             } else {
                 sender.sendMessage("Data commands are no console commands!");
             }
-    }
+        }
 
-    return true;
-}
+        return true;
+    }
 }
