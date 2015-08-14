@@ -7,6 +7,7 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -58,7 +59,7 @@ public class MyItem {
         this.myenchants = new ArrayList<MyEnchantment>();
         this.enchants = is.getEnchantments();
         if (is.hasItemMeta()) {
-            this.unbreakable = im   .spigot().isUnbreakable();
+            this.unbreakable = false;
             if (is.getItemMeta().hasDisplayName())
                 this.name = is.getItemMeta().getDisplayName();
             if (is.getItemMeta().hasLore())

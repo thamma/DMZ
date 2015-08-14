@@ -7,75 +7,58 @@ import org.bukkit.World;
 
 public class Utils {
 
-    public static boolean matchArgs(String src, String[] args)
-    {
-        boolean out = true;
+    public static boolean matchArgs(String src, String[] args) {
         String[] in = src.split(" ");
-        if (in.length != args.length) {
+        if (in.length != args.length)
             return false;
-        }
-        if (args.length == 0) {
+        if (args.length == 0 && in.length == 0)
             return true;
-        }
         for (int i = 0; i < in.length; i++) {
-            if (in[i].charAt(0) == '#')
-            {
+            if (in[i].charAt(0) == '#') {
                 String type = in[i].replaceFirst("#", "");
                 if (!type.equalsIgnoreCase("string")) {
-                    if (type.equalsIgnoreCase("int"))
-                    {
+                    if (type.equalsIgnoreCase("int")) {
                         if (!isNum(args[i])) {
-                            out = false;
+                            return false;
                         }
-                    }
-                    else if (type.equalsIgnoreCase("double"))
-                    {
+                    } else if (type.equalsIgnoreCase("double")) {
                         if (!isNum(args[i])) {
-                            out = false;
+                            return false;
                         }
-                    }
-                    else if ((type.equalsIgnoreCase("boolean")) &&
+                    } else if ((type.equalsIgnoreCase("boolean")) &&
                             (!isBool(args[i]))) {
-                        out = false;
+                        return false;
                     }
                 }
-            }
-            else if (!in[i].equalsIgnoreCase(args[i]))
-            {
+            } else if (!in[i].equalsIgnoreCase(args[i])) {
                 return false;
             }
         }
-        return out;
+        return true;
     }
 
-    private static boolean isNum(String string)
-    {
-        try
-        {
+
+    private static boolean isNum(String string) {
+        try {
             Integer.parseInt(string);
-        }
-        catch (NumberFormatException e)
-        {
+        } catch (NumberFormatException e) {
             return false;
         }
         return true;
     }
 
-    private static boolean isBool(String string)
-    {
+    private static boolean isBool(String string) {
         return (string.equalsIgnoreCase("true")) ||
                 (string.equalsIgnoreCase("false"));
     }
 
-    public static Location str2loc(String in)
-    {
+    public static Location str2loc(String in) {
         String[] s = in.split("\\;");
         World w = Bukkit.getWorld(s[0]);
         double x = Double.parseDouble(s[1]);
         double y = Double.parseDouble(s[2]);
         double z = Double.parseDouble(s[3]);
-        if (s.length == 6)
-        {
+        if (s.length == 6) {
             Float yaw = Float.valueOf(Float.parseFloat(s[4]));
             Float pit = Float.valueOf(Float.parseFloat(s[5]));
             return new Location(w, x, y, z, yaw.floatValue(), pit.floatValue());
@@ -83,8 +66,7 @@ public class Utils {
         return new Location(w, x + 0.5D, y, z + 0.5D);
     }
 
-    public static String loc2str(Location loc)
-    {
+    public static String loc2str(Location loc) {
         String w = loc.getWorld().getName();
         double x = loc.getX();
         double y = loc.getY();
@@ -97,8 +79,7 @@ public class Utils {
         return w + ";" + x + ";" + y + ";" + z + ";" + yaw + ";" + pit;
     }
 
-    public static String color(String text)
-    {
+    public static String color(String text) {
         return ChatColor.translateAlternateColorCodes('&', text);
         /*
         text = text.replaceAll("&0", String.valueOf(ChatColor.BLACK));

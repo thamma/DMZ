@@ -10,37 +10,29 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileManager
-{
+public class FileManager {
     static final String prefix = "plugins/";
     static final String suffix = ""; //".yml"
     private YamlConfiguration config;
     private String path;
 
-    public FileManager(String path)
-    {
+    public FileManager(String path) {
         this.path = path;
-        try
-        {
+        try {
             this.config = loadFile(path);
-        }
-        catch (IOException | InvalidConfigurationException e)
-        {
+        } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
     }
 
-    public static List<FileManager> getFromFolder(String path)
-    {
+    public static List<FileManager> getFromFolder(String path) {
         File folder = new File("plugins/" + path);
         ArrayList al = new ArrayList();
-        if (folder.exists())
-        {
+        if (folder.exists()) {
             File[] listOfFiles = folder.listFiles();
             File[] arrayOfFile1;
             int j = (arrayOfFile1 = listOfFiles).length;
-            for (int i = 0; i < j; i++)
-            {
+            for (int i = 0; i < j; i++) {
                 File file = arrayOfFile1[i];
                 if (file.isFile()) {
                     al.add(new FileManager(
@@ -52,78 +44,75 @@ public class FileManager
         return al;
     }
 
-    public String getPath()
-    {
+    public String getPath() {
         return this.path;
     }
 
-    public String getFileName()
-    {
+    public String getFileName() {
         return this.path.split("/")[(this.path.split("/").length - 1)];
     }
 
-    public void set(String path, Object o)
-    {
+    public void set(String path, Object o) {
         this.config.set(path, o);
         save();
     }
 
-    public boolean contains(String path)
-    {
+    public boolean contains(String path) {
         return this.config.contains(path);
     }
 
     public List<String> getKeys(String path) {
         List<String> al = new ArrayList<String>();
-        al.addAll(config.getConfigurationSection(path).getKeys(false));
+        if (config.contains(path))
+            al.addAll(config.getConfigurationSection(path).getKeys(false));
         return al;
     }
 
     private YamlConfiguration loadFile(String path)
-            throws IOException, InvalidConfigurationException
-    {
+            throws IOException, InvalidConfigurationException {
         File file = new File("plugins/" + path + suffix);
         YamlConfiguration config;
-        if (!file.exists())
-        {
+        if (!file.exists()) {
             file.getParentFile().mkdirs();
             file.createNewFile();
             config = new YamlConfiguration();
             config.load(file);
-        }
-        else
-        {
+        } else {
             config = new YamlConfiguration();
             config.load(file);
         }
         return config;
     }
 
-    private void save()
-    {
-        try
-        {
+    private void save() {
+        try {
             this.config.save(new File("plugins/" + this.path + suffix));
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public Location getLocation(String src) {
-        Location def = new Location(Bukkit.getWorld("world"), 0,0,0);
+        Location def = new Location(Bukkit.getWorld("world"), 0, 0, 0);
         if (this.config.contains(src)) {
             return Utils.str2loc(this.config.getString(src));
         }
-        this.config.set(src, def);
+        this.config.set(src, Utils.loc2str(def));
+        save();
+        return def;
+    }
+
+    public Location getLocation(String src, Location def) {
+        if (this.config.contains(src)) {
+            return Utils.str2loc(this.config.getString(src));
+        }
+        this.config.set(src, Utils.loc2str(def));
         save();
         return def;
     }
 
 
-    public String getString(String src, String def)
-    {
+    public String getString(String src, String def) {
         if (this.config.contains(src)) {
             return this.config.getString(src);
         }
@@ -132,8 +121,7 @@ public class FileManager
         return def;
     }
 
-    public String getString(String src)
-    {
+    public String getString(String src) {
         String def = "";
         if (this.config.contains(src)) {
             return this.config.getString(src);
@@ -143,8 +131,7 @@ public class FileManager
         return def;
     }
 
-    public int getInt(String src, int def)
-    {
+    public int getInt(String src, int def) {
         if (this.config.contains(src)) {
             return this.config.getInt(src);
         }
@@ -153,8 +140,7 @@ public class FileManager
         return def;
     }
 
-    public int getInt(String src)
-    {
+    public int getInt(String src) {
         int def = 0;
         if (this.config.contains(src)) {
             return this.config.getInt(src);
@@ -164,8 +150,7 @@ public class FileManager
         return def;
     }
 
-    public Boolean getBoolean(String src, Boolean def)
-    {
+    public Boolean getBoolean(String src, Boolean def) {
         if (this.config.contains(src)) {
             return this.config.getBoolean(src);
         }
@@ -174,8 +159,7 @@ public class FileManager
         return def;
     }
 
-    public Boolean getBoolean(String src)
-    {
+    public Boolean getBoolean(String src) {
         if (this.config.contains(src)) {
             return this.config.getBoolean(src);
         }
@@ -184,8 +168,7 @@ public class FileManager
         return false;
     }
 
-    public Double getDouble(String src, Double def)
-    {
+    public Double getDouble(String src, Double def) {
         if (this.config.contains(src)) {
             return this.config.getDouble(src);
         }
@@ -194,8 +177,7 @@ public class FileManager
         return def;
     }
 
-    public Double getDouble(String src)
-    {
+    public Double getDouble(String src) {
         Double def = 0.0D;
         if (this.config.contains(src)) {
             return this.config.getDouble(src);
@@ -205,8 +187,7 @@ public class FileManager
         return def;
     }
 
-    public List<String> getStringList(String src, List<String> def)
-    {
+    public List<String> getStringList(String src, List<String> def) {
         if (this.config.contains(src)) {
             return this.config.getStringList(src);
         }
@@ -215,8 +196,7 @@ public class FileManager
         return def;
     }
 
-    public List<String> getStringList(String src)
-    {
+    public List<String> getStringList(String src) {
         ArrayList def = new ArrayList();
         if (this.config.contains(src)) {
             return this.config.getStringList(src);

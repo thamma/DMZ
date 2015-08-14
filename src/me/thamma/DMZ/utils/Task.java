@@ -9,6 +9,8 @@ import java.util.ArrayList;
  */
 public interface Task {
 
+    int getAmount();
+
     void run(ArrayList<String> l, Player p);
 
 }
