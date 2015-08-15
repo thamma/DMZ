@@ -1,6 +1,7 @@
 package me.thamma.DMZ.data;
 
 import me.thamma.DMZ.Battle.MyItem;
+import me.thamma.DMZ.chests.CustomNBT;
 import me.thamma.DMZ.core.Main;
 import me.thamma.DMZ.utils.Task;
 import me.thamma.DMZ.utils.Utils;
@@ -13,6 +14,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -67,16 +69,20 @@ public class DataCommands implements CommandExecutor {
                     Chest c = (Chest) ((new Location(Bukkit.getWorld("world"), 0, 0, 0).getBlock().getState()));
                     p.openInventory(c.getBlockInventory());
                 } else if (Utils.matchArgs("update", args)) {
-                    p.setHealthScaled(true);
-                    p.setMaxHealth(100 + p.getLevel() * 10);
-                    p.setHealthScale(p.getMaxHealth() / 5);
-                    p.setHealth(p.getMaxHealth());
+//                    p.setHealthScaled(true);
+//                    p.setMaxHealth(100 + p.getLevel() * 10);
+//                    p.setHealthScale(p.getMaxHealth() / 5);
+//                    p.setHealth(p.getMaxHealth());
                     MyItem is = new MyItem(Material.WOOD_SWORD);
                     is.setName("&aKokiri Sword");
                     is.addEnchantment(new MyItem.MyEnchantment(MyItem.MyEnchantmentType.Damage, 3));
                     is.addEnchantment(new MyItem.MyEnchantment(MyItem.MyEnchantmentType.Poison, 2));
                     is.setLevel(3);
                     is.setLore(new String[]{"Totally not stolen from Link."});
+                    ItemStack a = is.getItemStack();
+                    ItemMeta im = a.getItemMeta();
+                    im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                    a.setItemMeta(im);
                     p.getInventory().addItem(is.getItemStack());
                 } else if (Utils.matchArgs("toolbar", args)) {
                     IconMenu menu = new IconMenu("Admin toolbar", 27, new IconMenu.OptionClickEventHandler() {

@@ -35,22 +35,7 @@ public class BattleListener implements Listener {
             MyLiving d2 = new MyLiving((LivingEntity) damager);
 
             dmg = d2.attack(d1);
-
-
-            if (damager.getType().equals(EntityType.PLAYER)) {
-                Player p = (Player) damager;
-                if (!p.getItemInHand().equals(null)) {
-                    MyItem is = new MyItem(p.getItemInHand());
-                    dmg = is.getEnchantmentLevel(MyItem.MyEnchantmentType.Damage) * 5;
-                }
-            } else if (damager.getType().equals(EntityType.ZOMBIE)) {
-                Zombie z = (Zombie) damager;
-                if (z.getCustomName().startsWith("Zombie Lv.")) {
-                    Integer level = Integer.parseInt(z.getCustomName().replaceFirst("Zombie Lv.", ""));
-
-                    dmg = 5 * level;
-                }
-            }
+            
         }
         e.setDamage(dmg);
     }
