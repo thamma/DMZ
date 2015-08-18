@@ -1,240 +1,218 @@
 package me.thamma.DMZ.chests;
 
-import me.thamma.DMZ.utils.FileManager;
-import me.thamma.DMZ.utils.Utils;
+import static me.thamma.DMZ.utils.Database.chestDb;	
+import static me.thamma.DMZ.utils.Database.config;
+
+import java.util.List;
+import java.util.Random;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import static me.thamma.DMZ.core.Main.config;
+import me.thamma.DMZ.Battle.Loot;
+import me.thamma.DMZ.utils.Utils;
 
 public class Chest {
 
-    public static FileManager db = new FileManager("DMZ/chests.yml");
+	private Location loc;
+	private int time;
+	private int amount;
+	private int id;
+	private byte data;
+	private Material material;
 
-    private Location loc;
-    private int time;
-    private int amount;
-    private int id;
-    private byte data;
-    private Material material;
+	public Chest() {
+		loc = new Location(Bukkit.getWorld("world"), 0, 0, 0);
+		time = 0;
+		amount = 0;
+		id = -1;
+	}
 
-    public Chest() {
-        loc = new Location(Bukkit.getWorld("world"), 0, 0, 0);
-        time = 0;
-        amount = 0;
-        id = -1;
-    }
+	/**
+	 * @param arg0
+	 *            location
+	 * @param arg1
+	 *            time
+	 * @param arg2
+	 *            amount
+	 */
+	@SuppressWarnings("deprecation")
+	public Chest(Location arg0, int arg1, int arg2) {
+		this.material = arg0.getBlock().getType();
+		this.data = arg0.getBlock().getData();
+		this.loc = arg0;
+		this.time = arg1;
+		this.amount = arg2;
+		this.id = nextId();
+		save();
+	}
 
+	@SuppressWarnings("deprecation")
+	public Chest(Location arg0, int arg1, int arg2, int arg3) {
+		this.material = arg0.getBlock().getType();
+		this.data = arg0.getBlock().getData();
+		this.loc = arg0;
+		this.time = arg1;
+		this.amount = arg2;
+		this.id = arg3;
+	}
 
-    /**
-     * @param arg0 location
-     * @param arg1 time
-     * @param arg2 amount
-     */
-    public Chest(Location arg0, int arg1, int arg2) {
-        this.material = arg0.getBlock().getType();
-        this.data = arg0.getBlock().getData();
-        this.loc = arg0;
-        this.time = arg1;
-        this.amount = arg2;
-        this.id = nextId();
-        save();
-    }
+	@SuppressWarnings("deprecation")
+	private static Chest loadChest(int id) {
+		if (chestDb.contains(String.valueOf(id))) {
+			Location loc = chestDb.getLocation(id + ".loc");
+			loc.getBlock().setType(Material.valueOf(chestDb.getString(id + ".material")));
+			loc.getBlock().setData((byte) chestDb.getInt(id + ".data"));
+			return new Chest(loc, chestDb.getInt(id + ".time"), chestDb.getInt(id + ".amount"), id);
+		}
+		return new Chest();
+	}
 
-    public Chest(Location arg0, int arg1, int arg2, int arg3) {
-        this.material = arg0.getBlock().getType();
-        this.data = arg0.getBlock().getData();
-        this.loc = arg0;
-        this.time = arg1;
-        this.amount = arg2;
-        this.id = arg3;
-    }
+	public static Chest getChest(Location arg0) {
+		for (String s : chestDb.getKeys("")) {
+			if (chestDb.getLocation(s + ".loc").distance(arg0) < 1) {
+				return loadChest(Integer.parseInt(s));
+			}
+		}
+		return new Chest();
+	}
 
-    private static Chest loadChest(int id) {
-        if (db.contains(String.valueOf(id))) {
-            Location loc = db.getLocation(id + ".loc");
-            loc.getBlock().setType(Material.valueOf(db.getString(id + ".material")));
-            loc.getBlock().setData((byte) db.getInt(id + ".data"));
-            return new Chest(loc, db.getInt(id + ".time"), db.getInt(id + ".amount"), id);
-        }
-        return new Chest();
-    }
+	public static boolean isChest(Block b) {
+		return isChest(b.getLocation());
+	}
 
-    public static Chest getChest(Location arg0) {
-        for (String s : db.getKeys("")) {
-            if (db.getLocation(s + ".loc").distance(arg0) < 1) {
-                return loadChest(Integer.parseInt(s));
-            }
-        }
-        return new Chest();
-    }
+	public static boolean isChest(Location arg0) {
+		arg0.add(0.5, 0, 0.5);
+		for (String s : chestDb.getKeys("")) {
+			if (chestDb.getLocation(s + ".loc").equals(arg0)) {
+				// is chest
+				return true;
+			}
+		}
+		return false;
+	}
 
-    public static boolean isChest(Block b) {
-        return isChest(b.getLocation());
-    }
+	public static void respawnAll() {
+		for (String s : chestDb.getKeys("")) {
+			Chest c = loadChest(Integer.parseInt(s));
+			c.fill();
+		}
+	}
 
-    public static boolean isChest(Location arg0) {
-        arg0.add(0.5, 0, 0.5);
-        for (String s : db.getKeys("")) {
-            if (db.getLocation(s + ".loc").equals(arg0)) {
-                //is chest
-                return true;
-            }
-        }
-        return false;
-    }
+	public Location getLocation() {
+		return this.loc;
+	}
 
-    public static void respawnAll() {
-        for (String s : db.getKeys("")) {
-            Chest c = loadChest(Integer.parseInt(s));
-            c.fill();
-        }
-    }
+	public int getTime() {
+		return this.time;
+	}
 
-    public Location getLocation() {
-        return this.loc;
-    }
+	public void setTime(int arg0) {
+		this.time = arg0;
+	}
 
-    public int getTime() {
-        return this.time;
-    }
+	public int getAmount() {
+		return this.amount;
+	}
 
-    public void setTime(int arg0) {
-        this.time = arg0;
-    }
+	public void setAmount(int arg0) {
+		this.amount = arg0;
+	}
 
-    public int getAmount() {
-        return this.amount;
-    }
+	public int getId() {
+		return this.id;
+	}
 
-    public void setAmount(int arg0) {
-        this.amount = arg0;
-    }
+	public org.bukkit.block.Chest getRemoteChest() {
+		return ((org.bukkit.block.Chest) getRemoteLocation().getBlock().getState());
+	}
 
-    public int getId() {
-        return this.id;
-    }
+	public Location getRemoteLocation() {
+		Location ref = Utils.str2loc(config.getString("chest.constants.reference", "world;-729;74;390"));
+		int x = config.getInt("chest.constants.vector.x", -2);
+		int y = config.getInt("chest.constants.vector.y", 0);
+		int z = config.getInt("chest.constants.vector.z", 0);
+		return ref.add(new Vector(x, y, z).multiply(this.getId()));
+	}
 
-    public org.bukkit.block.Chest getRemoteChest() {
-        return ((org.bukkit.block.Chest) getRemoteLocation().getBlock().getState());
-    }
+	private int nextId() {
+		int i = 0;
+		while (chestDb.contains(String.valueOf(i)))
+			i++;
+		return i;
+	}
 
-    public Location getRemoteLocation() {
-        Location ref = Utils.str2loc(config.getString(
-                "chest.constants.reference", "world;-729;74;390"));
-        int x = config.getInt("chest.constants.vector.x", -2);
-        int y = config.getInt("chest.constants.vector.y", 0);
-        int z = config.getInt("chest.constants.vector.z", 0);
-        return ref.add(new Vector(x, y, z).multiply(this.getId()));
-    }
+	public void respawn() {
+		Long time = (long) this.getTime();
+		Random r = new Random();
+		Double d = Double.valueOf(r.nextInt(50)) / 100;
+		d *= this.getTime();
+		time += (int) Math.round(d);
+		Bukkit.getScheduler().runTaskLater(ChestListener.plugin, new Runnable() {
+			@Override
+			public void run() {
+				fill();
+			}
+		}, time * 20L);
+	}
 
-    private int nextId() {
-        int i = 0;
-        while (db.contains(String.valueOf(i))) {
-            i++;
-        }
-        return i;
-    }
+	private boolean isEmpty(ItemStack[] in) {
+		for (ItemStack is : in) {
+			if (is != null)
+				return false;
+		}
+		return true;
+	}
 
-    public void respawn() {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(ChestListener.plugin, new BukkitRunnable() {
-            @Override
-            public void run() {
-                fill();
-            }
-        }, this.getTime() * 20L);
-    }
+	@SuppressWarnings("deprecation")
+	public void fill() {
+		// set chest material
+		loc.getBlock().setType(this.material);
+		loc.getBlock().setData(this.data);
+		// empty chest, set variables
+		org.bukkit.block.Chest chest = (org.bukkit.block.Chest) loc.getBlock().getState();
+		chest.getInventory().clear();
+		org.bukkit.block.Chest remote = (org.bukkit.block.Chest) getRemoteLocation().getBlock().getState();
+		if (isEmpty(remote.getInventory().getContents()))
+			return;
+		// setup loot
+		Loot l = new Loot(remote.getInventory());
+		List<ItemStack> loot = l.getRandomLoot(this.amount);
+		Random r = new Random();
+		// cannot fill entirely
+		if (loot.size() > 27)
+			return;
+		// distribute loot in chest
+		for (ItemStack is : loot) {
+			int dest = r.nextInt(27);
+			while (chest.getInventory().getContents()[dest] != null)
+				dest = r.nextInt(27);
+			chest.getInventory().setItem(dest, is);
+		}
+	}
 
-    private boolean isEmpty(ItemStack[] in) {
-        for (ItemStack is : in) {
-            if (is != null)
-                return false;
-        }
-        return true;
-    }
+	public void delete() {
+		org.bukkit.block.Chest chest = (org.bukkit.block.Chest) loc.getBlock().getState();
+		chest.getInventory().setContents(((org.bukkit.block.Chest) (getRemoteLocation().getBlock().getState()))
+				.getBlockInventory().getContents());
+		org.bukkit.block.Chest remote = (org.bukkit.block.Chest) getRemoteLocation().getBlock().getState();
+		remote.getInventory().clear();
+		getRemoteLocation().getBlock().getRelative(BlockFace.EAST).setType(Material.AIR);
+		getRemoteLocation().getBlock().setType(Material.AIR);
+		chestDb.set(String.valueOf(this.id), null);
+	}
 
-    public void fill() {
-        loc.getBlock().setType(this.material);
-        loc.getBlock().setData(this.data);
-
-        org.bukkit.block.Chest chest = (org.bukkit.block.Chest) loc.getBlock().getState();
-        chest.getInventory().clear();
-        org.bukkit.block.Chest remote = (org.bukkit.block.Chest) getRemoteLocation().getBlock().getState();
-
-        if (isEmpty(remote.getInventory().getContents()))
-            return;
-
-        Random r = new Random();
-
-        List<ItemStack> common = new ArrayList<ItemStack>();
-        List<ItemStack> uncommon = new ArrayList<ItemStack>();
-        List<ItemStack> rare = new ArrayList<ItemStack>();
-
-
-        for (int j = 0; j < 8; j++) {
-            if (remote.getInventory().getContents()[j] != null)
-                common.add(remote.getInventory().getItem(j));
-        }
-
-        for (int j = 9; j < 17; j++) {
-            if (remote.getInventory().getContents()[j] != null)
-                uncommon.add(remote.getInventory().getItem(j));
-        }
-
-        for (int j = 18; j < 26; j++) {
-            if (remote.getInventory().getContents()[j] != null)
-                rare.add(remote.getInventory().getItem(j));
-        }
-
-        List<ItemStack> loot = new ArrayList<ItemStack>();
-        while (loot.size() < this.getAmount()) {
-            int rarity = r.nextInt(100);
-            if (rarity < 70) {
-                if (common.size() > 0) {
-                    loot.add(common.get(r.nextInt(common.size())));
-                }
-            } else if (rarity < 95) {
-                if (uncommon.size() > 0) {
-                    loot.add(uncommon.get(r.nextInt(uncommon.size())));
-                }
-            } else {
-                if (rare.size() > 0) {
-                    loot.add(rare.get(r.nextInt(rare.size())));
-                }
-            }
-        }
-        for (ItemStack is : loot) {
-            int dest = r.nextInt(27);
-            while (chest.getInventory().getContents()[dest] != null)
-                dest = r.nextInt(27);
-            chest.getInventory().setItem(dest, is);
-        }
-    }
-
-
-    public void delete() {
-        org.bukkit.block.Chest chest = (org.bukkit.block.Chest) loc.getBlock().getState();
-        chest.getInventory().setContents(((org.bukkit.block.Chest) (getRemoteLocation().getBlock().getState())).getBlockInventory().getContents());
-        getRemoteLocation().getBlock().setType(Material.AIR);
-        db.set(String.valueOf(this.id), null);
-    }
-
-    public void save() {
-        db.set(id + ".material", this.material.toString());
-        db.set(id + ".data", this.data);
-        db.set(id + ".loc", Utils.loc2str(loc));
-        db.set(id + ".time", time);
-        db.set(id + ".amount", amount);
-    }
-
+	public void save() {
+		chestDb.set(id + ".material", this.material.toString());
+		chestDb.set(id + ".data", this.data);
+		chestDb.set(id + ".loc", Utils.loc2str(loc));
+		chestDb.set(id + ".time", time);
+		chestDb.set(id + ".amount", amount);
+	}
 
 }

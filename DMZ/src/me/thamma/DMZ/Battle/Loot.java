@@ -47,14 +47,18 @@ public class Loot {
 		return this.rare;
 	}
 
+	public boolean empty() {
+		return (common.size() == 0 && uncommon.size() == 0 && rare.size() == 0);
+	}
+
 	public List<ItemStack> getRandomLoot(int amount) {
 		List<ItemStack> l = new ArrayList<ItemStack>();
-		if (common.size() == 0 && uncommon.size() == 0 && rare.size() == 0)
+		if (empty())
 			return l;
 		Random r = new Random();
 		while (l.size() < amount) {
 			int chance = r.nextInt(100);
-			if (chance < 70) {
+			if (chance < 80) {
 				if (common.size() > 0)
 					l.add(common.get(r.nextInt(common.size())));
 			} else if (chance < 95) {

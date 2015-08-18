@@ -1,8 +1,9 @@
 package me.thamma.DMZ.Chunky;
 
-import me.thamma.DMZ.Battle.BattleListener;
-import me.thamma.DMZ.utils.TitlesAPI;
-import org.bukkit.Location;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -10,19 +11,19 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import me.thamma.DMZ.Battle.BattleListener;
+import me.thamma.DMZ.utils.TitlesAPI;
 
 /**
  * Created by pc on 14.06.2015.
  */
 public class ChunkyListener implements Listener {
 
+	@SuppressWarnings("serial")
 	public static List<EntityType> hostiles = new ArrayList<EntityType>() {
 		{
 			add(EntityType.ZOMBIE);
@@ -58,7 +59,7 @@ public class ChunkyListener implements Listener {
 
 	@EventHandler
 	public void onSpawn(CreatureSpawnEvent e) {
-		if (e.getSpawnReason().equals(SpawnReason.NATURAL)&&e.getEntity().getType().equals(EntityType.ZOMBIE))
+		if (e.getSpawnReason().equals(SpawnReason.NATURAL) && e.getEntity().getType().equals(EntityType.ZOMBIE))
 			for (Entity en : e.getEntity().getNearbyEntities(20, 20, 20)) {
 				if (en.getType().equals(EntityType.PLAYER)) {
 					e.setCancelled(true);
@@ -67,23 +68,23 @@ public class ChunkyListener implements Listener {
 			}
 
 		Chunky c = new Chunky(e.getLocation());
-		if (e.getSpawnReason().equals(SpawnReason.NATURAL))
-			if (c.getAttribute(Attribute.Mobspawn).equals("false")) {
-				if (hostiles.contains(e.getEntity().getType())) {
-					e.setCancelled(true);
-				}
-			} else {
-				if (!e.getEntityType().equals(EntityType.ZOMBIE)) {
-					e.setCancelled(true);
-				} else {
-					Zombie z = (Zombie) e.getEntity();
-					int level = Integer.parseInt(c.getAttribute(Attribute.Level));
-					z.setCustomName("Zombie Lv." + level);
-					z.setMaxHealth(BattleListener.healthAtLevel(level));
-					z.setHealth(z.getMaxHealth());
-					z.setCustomNameVisible(true);
-				}
+
+		if (c.getAttribute(Attribute.Mobspawn).equals("false")) {
+			if (hostiles.contains(e.getEntity().getType())) {
+				e.setCancelled(true);
 			}
+		} else {
+			if (!e.getEntityType().equals(EntityType.ZOMBIE)) {
+				e.setCancelled(true);
+			} else {
+				Zombie z = (Zombie) e.getEntity();
+				int level = Integer.parseInt(c.getAttribute(Attribute.Level));
+				z.setCustomName("Zombie Lv." + level);
+				z.setMaxHealth(BattleListener.healthAtLevel(level));
+				z.setHealth(z.getMaxHealth());
+				z.setCustomNameVisible(true);
+			}
+		}
 	}
 
 	@EventHandler
@@ -106,7 +107,7 @@ public class ChunkyListener implements Listener {
 		if (!e.getTo().getAttribute(Attribute.Name).equals("")
 				&& !(e.getTo().getAttribute(Attribute.Name)).equals(e.getFrom().getAttribute(Attribute.Name)))
 			TitlesAPI.sendTitle(p, e.getTo().getAttribute(Attribute.Name) + "...",
-					e.getTo().getAttribute(Attribute.SubTitle));
+					e.getTo().getAttribute(Attribute.SubTitle) + "...");
 		if (settings.containsKey(p.getName())) {
 			List<Setting> sl = settings.get(p.getName());
 			for (Setting s : sl) {
