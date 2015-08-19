@@ -2,6 +2,8 @@ package me.thamma.DMZ.chests;
 
 import java.util.HashSet;
 
+import static me.thamma.DMZ.utils.Utils.helpPage;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,20 +19,6 @@ import org.bukkit.inventory.ItemStack;
 import me.thamma.DMZ.utils.Utils;
 
 public class ChestCommands implements CommandExecutor {
-
-	public static String[] helpPage(String command, String... args) {
-		String title = Utils.color("&e--- &6" + command + " Helppage &e---");
-		if (args.length % 2 != 0) {
-			return new String[] { title };
-		}
-		String[] out = new String[args.length / 2 + 1];
-		out[0] = title;
-		for (int i = 0; i < args.length / 2; i++) {
-			out[i + 1] = Utils.color("&e/" + command + " &6" + args[2 * i] + " &e - " + args[2 * i + 1]);
-		}
-		return out;
-
-	}
 
 	@SuppressWarnings({ "serial", "deprecation" })
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

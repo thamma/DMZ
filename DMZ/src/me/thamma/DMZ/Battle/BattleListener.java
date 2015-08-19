@@ -9,6 +9,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
+
+import me.thamma.DMZ.custom.MyLiving;
+
 import org.bukkit.event.entity.EntityDeathEvent;
 
 /**

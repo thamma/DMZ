@@ -1,4 +1,4 @@
-package me.thamma.DMZ.Battle;
+package me.thamma.DMZ.custom;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -87,7 +87,7 @@ public class MyLiving {
 	// return out;
 	// }
 
-	public int getEnchantmentSum(MyItem.MyEnchantmentType ench) {
+	public int getEnchantmentSum(MyEnchantmentType ench) {
 		int out = 0;
 		List<ItemStack> l = new ArrayList<ItemStack>(Arrays.asList(this.entity.getEquipment().getArmorContents()));
 		l.add(this.entity.getEquipment().getItemInHand());
@@ -109,8 +109,9 @@ public class MyLiving {
 	 */
 	public int attack(MyLiving target) {
 		// no decent calculation!
-		return (Math.max(0, this.getEnchantmentSum(MyItem.MyEnchantmentType.Damage)
-				- target.getEnchantmentSum(MyItem.MyEnchantmentType.Armor))) * 2;
+		return (Math.max(0,
+				this.getEnchantmentSum(MyEnchantmentType.Damage) - target.getEnchantmentSum(MyEnchantmentType.Armor)))
+				* 2;
 	}
 
 }

@@ -14,7 +14,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import me.thamma.DMZ.Battle.Loot;
+import me.thamma.DMZ.custom.Loot;
 import me.thamma.DMZ.utils.Utils;
 
 public class Chest {

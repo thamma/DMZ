@@ -1,11 +1,11 @@
-package me.thamma.DMZ.Battle;
+package me.thamma.DMZ.custom;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -105,6 +105,10 @@ public class MyItem {
 		return 0;
 	}
 
+	public boolean isHideFlags() {
+		return this.hideFlags;
+	}
+
 	public int getEnchantmentLevel(MyEnchantmentType type) {
 		for (MyEnchantment e : myenchants) {
 			if (e.getType().equals(type)) {
@@ -118,48 +122,64 @@ public class MyItem {
 		return this.unbreakable;
 	}
 
-	public void setUnbreakable(boolean arg0) {
-		this.unbreakable = arg0;
+	public MyItem setUnbreakable(boolean arg0) {
+		MyItem temp = this.clone();
+		temp.unbreakable = arg0;
+		return temp;
 	}
 
 	public int getLevel() {
 		return this.level;
 	}
 
-	public void setLevel(int i) {
-		this.level = i;
+	public MyItem setLevel(int i) {
+		MyItem temp = this.clone();
+		temp.level = i;
+		return temp;
 	}
 
 	public String getName() {
 		return this.name;
 	}
 
-	public void setName(String arg0) {
-		this.name = arg0;
+	public MyItem setName(String arg0) {
+		MyItem temp = this.clone();
+		temp.name = arg0;
+		return temp;
 	}
 
-	public void setHideFlags(boolean arg0) {
-		this.hideFlags = arg0;
+	public MyItem setHideFlags(boolean arg0) {
+		MyItem temp = this.clone();
+		temp.hideFlags = arg0;
+		return temp;
 	}
 
 	public List<String> getLore() {
 		return this.lore;
 	}
 
-	public void setLore(String[] arg0) {
-		ArrayList<String> l = new ArrayList<String>();
-		for (String s : arg0) {
-			l.add(Utils.color(s));
-		}
-		this.lore = l;
+	public MyItem addLore(List<String> arg0) {
+		MyItem temp = this.clone();
+		temp.lore.addAll(arg0);
+		return temp;
 	}
 
-	public void setLore(List<String> arg0) {
+	public MyItem addLore(String[] arg0) {
+		return addLore(Arrays.asList(arg0));
+	}
+
+	public MyItem setLore(String[] arg0) {
+		return setLore(Arrays.asList(arg0));
+	}
+
+	public MyItem setLore(List<String> arg0) {
+		MyItem temp = this.clone();
 		ArrayList<String> l = new ArrayList<String>();
 		for (String s : arg0) {
 			l.add(Utils.color(s));
 		}
-		this.lore = l;
+		temp.lore = l;
+		return temp;
 	}
 
 	public List<MyEnchantment> getMyEnchantments() {
@@ -170,27 +190,40 @@ public class MyItem {
 		return this.enchants;
 	}
 
-	public void addEnchantment(MyEnchantment e) {
-		myenchants.add(e);
+	public MyItem addEnchantment(MyEnchantment e) {
+		MyItem temp = this.clone();
+		temp.myenchants.add(e);
+		return temp;
 	}
 
-	public void addEnchantment(Enchantment e, int lv) {
-		this.enchants.put(e, lv);
+	public MyItem addEnchantment(Enchantment e, int lv) {
+		MyItem temp = this.clone();
+		temp.enchants.put(e, lv);
+		return temp;
 	}
 
-	public void setLeatherColor(int r, int g, int b) {
-		if (!this.is.getType().toString().contains("LEATHER_"))
-			return;
-		LeatherArmorMeta lam = (LeatherArmorMeta) im;
+	public MyItem setLeatherColor(int r, int g, int b) {
+		MyItem temp = this.clone();
+		if (!temp.is.getType().toString().contains("LEATHER_"))
+			return temp;
+		LeatherArmorMeta lam = (LeatherArmorMeta) temp.im;
 		lam.setColor(Color.fromRGB(r, g, b));
+		return temp;
 	}
 
-	public void setEnchantment(MyEnchantment e) {
-		for (MyEnchantment i : myenchants) {
+	public MyItem setEnchantment(MyEnchantment e) {
+		MyItem temp = this.clone();
+		for (MyEnchantment i : temp.myenchants) {
 			if (e.getType().equals(i.getType()))
-				myenchants.remove(i);
+				temp.myenchants.remove(i);
 		}
-		myenchants.add(e);
+		temp.myenchants.add(e);
+		return temp;
+	}
+
+	@Override
+	public MyItem clone() {
+		return new MyItem(this.getItemStack());
 	}
 
 	public ItemStack getItemStack() {
@@ -203,61 +236,14 @@ public class MyItem {
 		for (MyEnchantment e : this.myenchants) {
 			l.add(Utils.color(e.toString()));
 		}
-		// im.spigot().setUnbreakable(this.unbreakable);
 		im.setLore(l);
 		is.addEnchantments(enchants);
 		is.setItemMeta(this.im);
 		NBTItem n = new NBTItem(is);
-		if (this.unbreakable)
-			n.setInteger("Unbreakable", 1);
-		if (this.hideFlags)
-			n.setInteger("HideFlags", 6);
+		n.setInteger("Unbreakable", (this.unbreakable ? 1 : 0));
+		n.setInteger("HideFlags", (this.hideFlags ? 1 : 0));
 		this.is = n.getItem();
 		return is;
-	}
-
-	public enum MyEnchantmentType {
-		Damage(ChatColor.GOLD), Armor(ChatColor.GOLD), Poison(ChatColor.GREEN), Swiftness(ChatColor.AQUA);
-
-		private ChatColor c;
-
-		MyEnchantmentType(ChatColor arg0) {
-			this.c = arg0;
-		}
-
-		public ChatColor getColor() {
-			return this.c;
-		}
-
-		public String getDisplayName() {
-			return StringUtils.capitalize(this.name());
-		}
-	}
-
-	public static class MyEnchantment {
-
-		private MyEnchantmentType e;
-		private int l;
-
-		public MyEnchantment(MyEnchantmentType arg0, int arg1) {
-			this.e = arg0;
-			this.l = arg1;
-		}
-
-		@Override
-		public String toString() {
-			return "" + this.getType().getColor() + (this.getLevel() >= 0 ? "+" : "-") + this.getLevel() + " "
-					+ this.getType().getDisplayName();
-		}
-
-		public MyEnchantmentType getType() {
-			return this.e;
-		}
-
-		public int getLevel() {
-			return this.l;
-		}
-
 	}
 
 }

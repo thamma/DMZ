@@ -13,6 +13,9 @@ commands:
     data:
        description: Use /data for help
        usage: /data
+    myitem:
+       description: Use /myitem for help
+       usage: /myitem
     chunky:
        description: Use /chunky for help
        usage: /chunky

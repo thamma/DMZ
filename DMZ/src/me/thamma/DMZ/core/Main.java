@@ -14,6 +14,7 @@ import me.thamma.DMZ.Connection.ConnectListener;
 import me.thamma.DMZ.chests.Chest;
 import me.thamma.DMZ.chests.ChestCommands;
 import me.thamma.DMZ.chests.ChestListener;
+import me.thamma.DMZ.custom.MyItemCommands;
 import me.thamma.DMZ.data.DataCommands;
 import me.thamma.DMZ.data.DataListener;
 import me.thamma.DMZ.warps.WarpCommands;
@@ -27,6 +28,7 @@ public class Main extends JavaPlugin {
 		getCommand("warp").setExecutor(new WarpCommands());
 		getCommand("data").setExecutor(new DataCommands());
 		getCommand("chunky").setExecutor(new ChunkyCommands());
+		getCommand("myitem").setExecutor(new MyItemCommands());
 
 		getServer().getPluginManager().registerEvents(new MyListener(), this);
 		getServer().getPluginManager().registerEvents(new ChestListener(this), this);

@@ -107,7 +107,7 @@ public class ChunkyListener implements Listener {
 		if (!e.getTo().getAttribute(Attribute.Name).equals("")
 				&& !(e.getTo().getAttribute(Attribute.Name)).equals(e.getFrom().getAttribute(Attribute.Name)))
 			TitlesAPI.sendTitle(p, e.getTo().getAttribute(Attribute.Name) + "...",
-					e.getTo().getAttribute(Attribute.SubTitle) + "...");
+					e.getTo().getAttribute(Attribute.SubTitle));
 		if (settings.containsKey(p.getName())) {
 			List<Setting> sl = settings.get(p.getName());
 			for (Setting s : sl) {

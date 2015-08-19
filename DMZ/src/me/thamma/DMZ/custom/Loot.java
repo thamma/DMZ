@@ -1,4 +1,4 @@
-package me.thamma.DMZ.Battle;
+package me.thamma.DMZ.custom;
 
 import java.util.ArrayList;
 import java.util.List;

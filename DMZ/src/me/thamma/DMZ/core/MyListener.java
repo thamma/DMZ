@@ -12,7 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerFishEvent.State;
 
-import me.thamma.DMZ.Battle.Loot;
+import me.thamma.DMZ.custom.Loot;
 
 public class MyListener implements Listener {
 

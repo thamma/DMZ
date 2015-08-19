@@ -15,8 +15,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import me.thamma.DMZ.Battle.MyItem;
-import me.thamma.DMZ.utils.Task;
+import me.thamma.DMZ.custom.MyEnchantment;
+import me.thamma.DMZ.custom.MyEnchantmentType;
+import me.thamma.DMZ.custom.MyItem;
 import me.thamma.DMZ.utils.Utils;
 
 /**
@@ -33,13 +34,13 @@ public class DataCommands implements CommandExecutor {
 			if ((sender instanceof Player)) {
 				Player p = (Player) sender;
 				if (Utils.matchArgs("enchant", args)) {
-					for (MyItem.MyEnchantmentType et : MyItem.MyEnchantmentType.values()) {
+					for (MyEnchantmentType et : MyEnchantmentType.values()) {
 						p.sendMessage("-" + et.getColor() + et.toString());
 					}
 				} else if (Utils.matchArgs("enchant #string #int", args)) {
 					try {
-						MyItem.MyEnchantmentType et = MyItem.MyEnchantmentType.valueOf(args[1]);
-						MyItem.MyEnchantment myench = new MyItem.MyEnchantment(et, Integer.parseInt(args[2]));
+						MyEnchantmentType et = MyEnchantmentType.fromString(args[1]);
+						MyEnchantment myench = new MyEnchantment(et, Integer.parseInt(args[2]));
 						if (p.getItemInHand() != null) {
 							MyItem mi = new MyItem(p.getItemInHand());
 							mi.addEnchantment(myench);
