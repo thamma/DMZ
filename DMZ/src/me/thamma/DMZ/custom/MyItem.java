@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -72,10 +73,6 @@ public class MyItem {
 					String line = ChatColor.stripColor(s);
 					if (line.startsWith("Level: ")) {
 						this.level = Integer.parseInt(line.replaceFirst("Level: ", ""));
-					} else if (line.toLowerCase().contains("unbreakable")) {
-						this.unbreakable = true;
-					} else if (line.toLowerCase().contains("hidetags")) {
-						this.hideFlags = true;
 					} else if (line.startsWith("+") || line.startsWith("-")) {
 						int lv = Integer.parseInt(line.split(" ")[0]);
 						MyEnchantmentType e = MyEnchantmentType.valueOf(line.split(" ")[1]);
@@ -83,17 +80,15 @@ public class MyItem {
 					} else {
 						this.lore.add(line);
 					}
-
 				}
 		}
 	}
 
 	public static void updateItems(Player p) {
-		for (int i = 0; i < p.getInventory().getContents().length; i++) {
-			if (p.getInventory().getContents()[i] != null) {
+		for (int i = 0; i < p.getInventory().getContents().length; i++)
+			if (p.getInventory().getContents()[i] != null)
 				p.getInventory().setItem(i, new MyItem(p.getInventory().getContents()[i]).getItemStack());
-			}
-		}
+
 	}
 
 	public int getEnchantmentLevel(Enchantment type) {
@@ -192,6 +187,13 @@ public class MyItem {
 
 	public MyItem addEnchantment(MyEnchantment e) {
 		MyItem temp = this.clone();
+		MyEnchantment entry = null;
+		for (MyEnchantment me : temp.myenchants) {
+			if (me.getType().equals(e.getType()))
+				entry = me;
+		}
+		if (entry != null)
+			temp.myenchants.remove(entry);
 		temp.myenchants.add(e);
 		return temp;
 	}
@@ -234,14 +236,15 @@ public class MyItem {
 		if (level > 0)
 			l.add(Utils.color("&fLevel: " + level));
 		for (MyEnchantment e : this.myenchants) {
-			l.add(Utils.color(e.toString()));
+			if (e.getLevel() > 0)
+				l.add(Utils.color(e.toString()));
 		}
 		im.setLore(l);
 		is.addEnchantments(enchants);
 		is.setItemMeta(this.im);
 		NBTItem n = new NBTItem(is);
 		n.setInteger("Unbreakable", (this.unbreakable ? 1 : 0));
-		n.setInteger("HideFlags", (this.hideFlags ? 1 : 0));
+		n.setInteger("HideFlags", (this.hideFlags ? 6 : 0));
 		this.is = n.getItem();
 		return is;
 	}

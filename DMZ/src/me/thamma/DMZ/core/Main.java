@@ -17,6 +17,7 @@ import me.thamma.DMZ.chests.ChestListener;
 import me.thamma.DMZ.custom.MyItemCommands;
 import me.thamma.DMZ.data.DataCommands;
 import me.thamma.DMZ.data.DataListener;
+import me.thamma.DMZ.data.TaskListener;
 import me.thamma.DMZ.warps.WarpCommands;
 
 public class Main extends JavaPlugin {
@@ -38,6 +39,7 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new EquipListener(), this);
 		getServer().getPluginManager().registerEvents(new ConnectListener(), this);
 		getServer().getPluginManager().registerEvents(new ColorSign(), this);
+		getServer().getPluginManager().registerEvents(new TaskListener(), this);
 
 		initMaps();
 
