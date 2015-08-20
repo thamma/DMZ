@@ -33,6 +33,7 @@ public class MyItem {
 	private String name;
 	private boolean unbreakable;
 	private boolean hideFlags;
+	private List<String> rawlore;
 
 	public MyItem(Material arg0) {
 		this(arg0, 1, (short) 0);
@@ -52,6 +53,7 @@ public class MyItem {
 		this.name = "";
 		this.unbreakable = false;
 		this.hideFlags = false;
+		this.rawlore = new ArrayList<String>();
 	}
 
 	public MyItem(ItemStack is) {
@@ -59,6 +61,7 @@ public class MyItem {
 		this.im = this.is.getItemMeta();
 		this.name = "";
 		this.lore = new ArrayList<String>();
+		this.rawlore = new ArrayList<String>();
 		this.level = 0;
 		this.myenchants = new ArrayList<MyEnchantment>();
 		this.enchants = is.getEnchantments();
@@ -82,6 +85,16 @@ public class MyItem {
 					}
 				}
 		}
+	}
+
+	public MyItem setRawLore(List<String> arg0) {
+		MyItem temp = this.clone();
+		temp.rawlore = arg0;
+		return temp;
+	}
+
+	public MyItem setRawLore(String[] arg0) {
+		return setRawLore(Arrays.asList(arg0));
 	}
 
 	public static void updateItems(Player p) {
@@ -232,12 +245,16 @@ public class MyItem {
 		if (!this.name.equals(""))
 			im.setDisplayName(Utils.color(this.name));
 		ArrayList<String> l = new ArrayList<String>();
-		l.addAll(this.lore);
-		if (level > 0)
-			l.add(Utils.color("&fLevel: " + level));
-		for (MyEnchantment e : this.myenchants) {
-			if (e.getLevel() > 0)
-				l.add(Utils.color(e.toString()));
+		if (rawlore.isEmpty()) {
+			l.addAll(this.lore);
+			if (level > 0)
+				l.add(Utils.color("&fLevel: " + level));
+			for (MyEnchantment e : this.myenchants) {
+				if (e.getLevel() > 0)
+					l.add(Utils.color(e.toString()));
+			}
+		} else {
+			l.addAll(this.rawlore);
 		}
 		im.setLore(l);
 		is.addEnchantments(enchants);

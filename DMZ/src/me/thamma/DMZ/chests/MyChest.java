@@ -17,7 +17,7 @@ import org.bukkit.util.Vector;
 import me.thamma.DMZ.custom.Loot;
 import me.thamma.DMZ.utils.Utils;
 
-public class Chest {
+public class MyChest {
 
 	private Location loc;
 	private int time;
@@ -26,7 +26,7 @@ public class Chest {
 	private byte data;
 	private Material material;
 
-	public Chest() {
+	public MyChest() {
 		loc = new Location(Bukkit.getWorld("world"), 0, 0, 0);
 		time = 0;
 		amount = 0;
@@ -42,7 +42,7 @@ public class Chest {
 	 *            amount
 	 */
 	@SuppressWarnings("deprecation")
-	public Chest(Location arg0, int arg1, int arg2) {
+	public MyChest(Location arg0, int arg1, int arg2) {
 		this.material = arg0.getBlock().getType();
 		this.data = arg0.getBlock().getData();
 		this.loc = arg0;
@@ -53,7 +53,7 @@ public class Chest {
 	}
 
 	@SuppressWarnings("deprecation")
-	public Chest(Location arg0, int arg1, int arg2, int arg3) {
+	public MyChest(Location arg0, int arg1, int arg2, int arg3) {
 		this.material = arg0.getBlock().getType();
 		this.data = arg0.getBlock().getData();
 		this.loc = arg0;
@@ -63,23 +63,23 @@ public class Chest {
 	}
 
 	@SuppressWarnings("deprecation")
-	private static Chest loadChest(int id) {
+	private static MyChest loadChest(int id) {
 		if (chestDb.contains(String.valueOf(id))) {
 			Location loc = chestDb.getLocation(id + ".loc");
 			loc.getBlock().setType(Material.valueOf(chestDb.getString(id + ".material")));
 			loc.getBlock().setData((byte) chestDb.getInt(id + ".data"));
-			return new Chest(loc, chestDb.getInt(id + ".time"), chestDb.getInt(id + ".amount"), id);
+			return new MyChest(loc, chestDb.getInt(id + ".time"), chestDb.getInt(id + ".amount"), id);
 		}
-		return new Chest();
+		return new MyChest();
 	}
 
-	public static Chest getChest(Location arg0) {
+	public static MyChest getChest(Location arg0) {
 		for (String s : chestDb.getKeys("")) {
 			if (chestDb.getLocation(s + ".loc").distance(arg0) < 1) {
 				return loadChest(Integer.parseInt(s));
 			}
 		}
-		return new Chest();
+		return new MyChest();
 	}
 
 	public static boolean isChest(Block b) {
@@ -99,7 +99,7 @@ public class Chest {
 
 	public static void respawnAll() {
 		for (String s : chestDb.getKeys("")) {
-			Chest c = loadChest(Integer.parseInt(s));
+			MyChest c = loadChest(Integer.parseInt(s));
 			c.fill();
 		}
 	}

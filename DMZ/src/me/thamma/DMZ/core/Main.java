@@ -3,6 +3,8 @@ package me.thamma.DMZ.core;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.thamma.DMZ.Battle.BattleListener;
@@ -11,13 +13,15 @@ import me.thamma.DMZ.Chunky.Chunky;
 import me.thamma.DMZ.Chunky.ChunkyCommands;
 import me.thamma.DMZ.Chunky.ChunkyListener;
 import me.thamma.DMZ.Connection.ConnectListener;
-import me.thamma.DMZ.chests.Chest;
+import me.thamma.DMZ.chests.MyChest;
 import me.thamma.DMZ.chests.ChestCommands;
 import me.thamma.DMZ.chests.ChestListener;
 import me.thamma.DMZ.custom.MyItemCommands;
 import me.thamma.DMZ.data.DataCommands;
 import me.thamma.DMZ.data.DataListener;
 import me.thamma.DMZ.data.TaskListener;
+import me.thamma.DMZ.utils.Argument;
+import me.thamma.DMZ.utils.CommandHandler;
 import me.thamma.DMZ.warps.WarpCommands;
 
 public class Main extends JavaPlugin {
@@ -43,7 +47,9 @@ public class Main extends JavaPlugin {
 
 		initMaps();
 
-		Chest.respawnAll();
+		MyChest.respawnAll();
+
+		
 	}
 
 	public void initMaps() {
