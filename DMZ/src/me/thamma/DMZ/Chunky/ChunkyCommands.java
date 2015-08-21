@@ -1,103 +1,233 @@
 package me.thamma.DMZ.Chunky;
 
-import me.thamma.DMZ.utils.Utils;
-import me.thamma.DMZ.Chunky.ChunkyListener.Setting;
+import static me.thamma.DMZ.utils.Utils.msg;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
+import me.thamma.DMZ.Chunky.ChunkyListener.Setting;
+import me.thamma.DMZ.utils.Argument;
+import me.thamma.DMZ.utils.CommandHandler;
 
-/**
- * Created by pc on 14.06.2015.
- */
 public class ChunkyCommands implements CommandExecutor {
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (cmd.getName().equalsIgnoreCase("chunky")) {
-            if ((sender instanceof Player)) {
-                Player p = (Player) sender;
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		if (cmd.getName().equalsIgnoreCase("chunky")) {
+			CommandHandler ch = new CommandHandler(sender, "chunky", args).add(new Argument() {
 
-                Chunky c = new Chunky(p.getLocation());
-                if (Utils.matchArgs("runset", args)) {
-                    if (ChunkyListener.settings.containsKey(p.getName())) {
-                        ChunkyListener.settings.remove(p.getName());
-                        p.sendMessage("Runset unset.");
-                    } else {
-                        p.sendMessage("No runset setup for you. Use /chunky runset <Attribute> <Value> to do so.");
-                    }
-                } else if (args.length > 2 && args[0].equalsIgnoreCase("runset")) {
-                    if (args.length % 2 == 0) {
-                        p.sendMessage("Syntax error!");
-                    } else {
-                        List<Setting> sl = new ArrayList<Setting>();
-                        for (int i = 1; i < args.length; i += 2) {
-                            try {
-                                sl.add(new Setting(Attribute.valueOf(args[i]), args[i + 1]));
-                            } catch (Exception e) {
-                                p.sendMessage("No such attribute");
-                                return false;
-                            }
-                        }
-                        ChunkyListener.settings.put(p.getName(), sl);
-                        p.sendMessage(Utils.color("&eRunset created with attributes:"));
-                        for (Setting s : sl) {
-                            p.sendMessage(Utils.color("&e - &6" + s.getAttribute().name() + "   &eValue: &6" + s.getValue()));
-                        }
-                        p.sendMessage(Utils.color("\n" +
-                                "&eType &6/chunky runset &eto disable."));
-                    }
-                    try {
+				@Override
+				public String name() {
+					return "runset";
+				}
 
-                    } catch (Exception e) {
-                        p.sendMessage("No such attribute");
-                    }
-                } else if (Utils.matchArgs("att", args)) {
-                    for (Attribute a : Attribute.values()) {
-                        p.sendMessage(" - " + a.name());
-                    }
-                } else if (Utils.matchArgs("att #String", args)) {
-                    try {
-                        Attribute a = Attribute.valueOf(args[1]);
-                        p.sendMessage(Utils.color("&eThe attribute &6" + a.name() + " &efor this chunky is &6" + c.getAttribute(a) + "&e."));
-                    } catch (Exception e) {
-                        p.sendMessage("No such attribute");
-                    }
-                } else if (Utils.matchArgs("att #String #String", args)) {
-                    try {
-                        Attribute a = Attribute.valueOf(args[1]);
-                        c.setAttribute(a, args[2]);
-                        p.sendMessage(Utils.color("&eSet the attribute &6" + a.name() + " &efor this chunky to &6" + args[2] + "&e."));
-                    } catch (Exception e) {
-                        p.sendMessage("No such attribute");
-                    }
-                } else if (Utils.matchArgs("save", args)) {
-                    Chunky.saveAll();
-                } else if (Utils.matchArgs("map #String", args)) {
-                    //try {
-                    Attribute a = Attribute.valueOf(args[1]);
-                    c.print(p, a);
-                    // } catch (Exception e) {
-                    //   p.sendMessage("No such attribute");
-                    //}
-                } else if (Utils.matchArgs("map #String #int", args)) {
-                    try {
-                        Attribute a = Attribute.valueOf(args[1]);
-                        c.print(p, a, Integer.parseInt(args[2]));
-                    } catch (Exception e) {
-                        p.sendMessage("No such attribute");
-                    }
-                } else {
-                    p.sendMessage("att, att <attribute>, att <attribute> <value>, map <attribute>, save" +
-                            "");
-                }
+				@Override
+				public String descr() {
+					return "Unsets your current runset";
+				}
 
-            }
-        }
-        return true;
-    }
+				@Override
+				public void run(Player p, List<String> args) {
+					if (ChunkyListener.settings.containsKey(p.getName())) {
+						ChunkyListener.settings.remove(p.getName());
+						msg(p, "&eRunset unset.");
+					} else {
+						msg(p, "&eNo runset setup for you. See &6/chunky&e.");
+					}
+				}
+
+			}).add(new Argument() {
+
+				@Override
+				public String name() {
+					return "runset";
+				}
+
+				@Override
+				public Class<?>[] pattern() {
+					return new Class<?>[] { String.class };
+				}
+
+				@Override
+				public String[] patternString() {
+					return new String[] { "\"<Attribute> <Value> ...\"" };
+				}
+
+				@Override
+				public String descr() {
+					return "Sets Attributes by walking though Chunkys";
+				}
+
+				@Override
+				public void run(Player p, List<String> args) {
+					String[] argArray = args.get(1).split(" ");
+					if (argArray.length % 2 != 0) {
+						msg(p, "&cSyntax error!");
+						msg(p, "&cExample: &e/chunky runset \"Name Home Mobspawn false\".");
+					} else {
+						List<Setting> sl = new ArrayList<Setting>();
+						for (int i = 0; i < argArray.length; i += 2) {
+							try {
+								sl.add(new Setting(Attribute.valueOf(argArray[i].replaceAll("\"", "")),
+										argArray[i + 1].replaceFirst("\"", "")));
+							} catch (Exception e) {
+								msg(p, "&cNo such attribute: &6" + argArray[i]);
+							}
+						}
+						ChunkyListener.settings.put(p.getName(), sl);
+						msg(p, "&eRunset created with attributes:");
+						for (Setting s : sl) {
+							msg(p, "&e - &6" + s.getAttribute().name() + "&e:  &6" + s.getValue());
+						}
+						msg(p, "&eType &6/chunky runset &eto disable.");
+					}
+				}
+
+			}).add(new Argument() {
+
+				@Override
+				public String name() {
+					return "att";
+				}
+
+				@Override
+				public String descr() {
+					return "lists the Attributes available";
+				}
+
+				@Override
+				public void run(Player p, List<String> args) {
+					for (Attribute a : Attribute.values()) {
+						p.sendMessage(" &e- &6" + a.name() + "&e,     default: " + a.getDefaultValue());
+					}
+				}
+
+			}).add(new Argument() {
+
+				@Override
+				public String name() {
+					return "att";
+				}
+
+				@Override
+				public String descr() {
+					return "Displays the attribute in the current Chunky";
+				}
+
+				@Override
+				public Class<?>[] pattern() {
+					return new Class<?>[] { String.class };
+				}
+
+				@Override
+				public String[] patternString() {
+					return new String[] { "Attribute" };
+				}
+
+				@Override
+				public void run(Player p, List<String> args) {
+					try {
+						Attribute a = Attribute.valueOf(args.get(1));
+						Chunky c = new Chunky(p.getLocation());
+						msg(p, "&eThe attribute &6" + a.name() + " &efor this chunky is &6" + c.getAttribute(a)
+								+ "&e.");
+					} catch (Exception e) {
+						p.sendMessage("&cNo such attribute: &6" + args.get(1));
+					}
+				}
+
+			}).add(new Argument() {
+
+				@Override
+				public String name() {
+					return "att";
+				}
+
+				@Override
+				public String descr() {
+					return "Sets the attribute in the current Chunky";
+				}
+
+				@Override
+				public Class<?>[] pattern() {
+					return new Class<?>[] { String.class, String.class };
+				}
+
+				@Override
+				public String[] patternString() {
+					return new String[] { "Attribute", "Value" };
+				}
+
+				@Override
+				public void run(Player p, List<String> args) {
+					try {
+						Attribute a = Attribute.valueOf(args.get(1));
+						Chunky c = new Chunky(p.getLocation());
+						c.setAttribute(a, args.get(2));
+						msg(p, "&eSet the attribute &6" + a.name() + " &efor this chunky to &6" + args.get(2) + "&e.");
+					} catch (Exception e) {
+						p.sendMessage("&cNo such attribute: &6" + args.get(1));
+					}
+				}
+
+			}).add(new Argument() {
+
+				@Override
+				public String name() {
+					return "map";
+				}
+
+				@Override
+				public String descr() {
+					return "Maps the Attribute of near Chunkys";
+				}
+
+				@Override
+				public Class<?>[] pattern() {
+					return new Class<?>[] { String.class, Integer.class };
+				}
+
+				@Override
+				public String[] patternString() {
+					return new String[] { "Attribute", "Range" };
+				}
+
+				@Override
+				public void run(Player p, List<String> args) {
+					try {
+						Chunky c = new Chunky(p.getLocation());
+						Attribute a = Attribute.valueOf(args.get(1));
+						c.print(p, a, Integer.parseInt(args.get(2)));
+					} catch (Exception e) {
+						p.sendMessage("&cNo such attribute: &6" + args.get(1));
+					}
+				}
+
+			}).add(new Argument() {
+
+				@Override
+				public String name() {
+					return "save";
+				}
+
+				@Override
+				public String descr() {
+					return "saves all modified chunkys";
+				}
+
+				@Override
+				public void run(Player p, List<String> args) {
+					Chunky.saveAll();
+				}
+
+			});
+			ch.perform();
+		}
+		return true;
+	}
 
 }

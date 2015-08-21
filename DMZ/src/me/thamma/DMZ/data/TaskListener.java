@@ -1,5 +1,7 @@
 package me.thamma.DMZ.data;
 
+import static me.thamma.DMZ.utils.Utils.msg;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,7 +15,7 @@ import me.thamma.DMZ.utils.Utils;
 public class TaskListener implements Listener {
 
 	private static HashMap<String, ArrayList<String>> messages = new HashMap<String, ArrayList<String>>();
-	public static HashMap<String, Task> tasks = new HashMap<String, Task>();
+	public static HashMap<String, ChatTask> tasks = new HashMap<String, ChatTask>();
 
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent e) {
@@ -23,13 +25,13 @@ public class TaskListener implements Listener {
 			if (!messages.containsKey(p.getName())) {
 				messages.put(p.getName(), new ArrayList<String>());
 			}
-			Task t = tasks.get(p.getName());
+			ChatTask t = tasks.get(p.getName());
 			ArrayList<String> l = messages.get(p.getName());
 			if (!e.getMessage().equalsIgnoreCase("done.") && t.getAmount() != messages.get(p.getName()).size() + 1) {
 				// if not ready yet
 				l.add(Utils.color(e.getMessage()));
 				messages.put(p.getName(), l);
-				p.sendMessage(Utils.color("&eAdded line: \"" + e.getMessage() + "&e\""));
+				msg(p, "&eAdded line: \"" + e.getMessage() + "&e\"");
 				return;
 			}
 			if (!e.getMessage().equals("done."))

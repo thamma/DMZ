@@ -1,5 +1,6 @@
 package me.thamma.DMZ.warps;
 
+import static me.thamma.DMZ.utils.Utils.*;
 import me.thamma.DMZ.utils.Utils;
 
 import static me.thamma.DMZ.utils.Database.warpDb;
@@ -25,7 +26,7 @@ public class WarpCommands implements CommandExecutor {
 				if (Utils.matchArgs("list", args)) {
 					int size = Warp.getWarps().size();
 					if (size == 0) {
-						sendMessage(p, "&eNo warps available.");
+						msg(p, "&eNo warps available.");
 					} else {
 						List<String> al = Warp.getWarps();
 						Collections.sort(al);
@@ -34,29 +35,29 @@ public class WarpCommands implements CommandExecutor {
 							out = out + "&7, &e" + s;
 						}
 						out = out.replaceFirst("&7, ", "");
-						sendMessage(p, "&6Available warps:");
-						sendMessage(p, out);
+						msg(p, "&6Available warps:");
+						msg(p, out);
 					}
 				} else if (Utils.matchArgs("set #string", args)) {
 					if (Warp.getWarps().contains(args[1].toLowerCase())) {
-						sendMessage(p, "&eWarp &6" + args[1].toLowerCase() + "&e moved.");
+						msg(p, "&eWarp &6" + args[1].toLowerCase() + "&e moved.");
 					} else {
-						sendMessage(p, "&eWarp &6" + args[1].toLowerCase() + "&e set.");
+						msg(p, "&eWarp &6" + args[1].toLowerCase() + "&e set.");
 					}
 					warpDb.set(args[1].toLowerCase(), Utils.loc2str(p.getLocation()));
 				} else if (Utils.matchArgs("del #string", args)) {
 					if (Warp.getWarps().contains(args[1].toLowerCase())) {
 						warpDb.set(args[1].toLowerCase(), null);
-						sendMessage(p, "&eWarp &6" + args[1] + "&e deleted.");
+						msg(p, "&eWarp &6" + args[1] + "&e deleted.");
 					} else {
-						sendMessage(p, "&eThe warp &6" + args[1] + "&e does not exist.");
+						msg(p, "&eThe warp &6" + args[1] + "&e does not exist.");
 					}
 				} else if ((Utils.matchArgs("#string", args)) && (!Utils.matchArgs("help", args))) {
 					if (Warp.getWarps().contains(args[0].toLowerCase())) {
 						Location loc = Utils.str2loc(warpDb.getString(args[0]));
 						p.teleport(loc);
 					} else {
-						sendMessage(p, "&eThe warp &6" + args[0] + "&e does not exist.");
+						msg(p, "&eThe warp &6" + args[0] + "&e does not exist.");
 					}
 				} else if (Utils.matchArgs("#string #string", args)) {
 					if (Warp.getWarps().contains(args[1])) {
@@ -65,15 +66,15 @@ public class WarpCommands implements CommandExecutor {
 						Player q = Bukkit.getPlayer(args[+0]);
 						if (q != null) {
 							q.teleport(loc);
-							sendMessage(p, "&eTeleported &6" + q.getName() + " &eto warp &6" + args[1] + "&e.");
+							msg(p, "&eTeleported &6" + q.getName() + " &eto warp &6" + args[1] + "&e.");
 						} else {
-							sendMessage(p, "&6" + args[0] + "&e is not online.");
+							msg(p, "&6" + args[0] + "&e is not online.");
 						}
 					} else {
-						sendMessage(p, "&eThe warp &6" + args[1] + "&e does not exist.");
+						msg(p, "&eThe warp &6" + args[1] + "&e does not exist.");
 					}
 				} else {
-					sendMessage(p, new String[] { "&e--- &6Warp Helppage &e---",
+					msg(p, new String[] { "&e--- &6Warp Helppage &e---",
 							"&e/warp &6list &e- Shows the available warps.", "&e/warp &6set [name] &e- Sets a warp.",
 							"&e/warp &6del [name] &e- Deletes a warp.", "&e/warp &6[name] &e- Teleports you to a warp.",
 							"&e/warp &6[player] [name] &e- Teleports a player to a warp.",
@@ -120,16 +121,6 @@ public class WarpCommands implements CommandExecutor {
 			}
 		}
 		return true;
-	}
-
-	private void sendMessage(Player p, String s) {
-		p.sendMessage(Utils.color(s));
-	}
-
-	private void sendMessage(Player p, String[] s) {
-		for (String t : s) {
-			sendMessage(p, t);
-		}
 	}
 
 }

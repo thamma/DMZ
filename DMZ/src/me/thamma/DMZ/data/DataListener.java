@@ -1,6 +1,7 @@
 package me.thamma.DMZ.data;
 
 import static me.thamma.DMZ.utils.Database.playerDb;
+import static me.thamma.DMZ.utils.Utils.msg;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import me.thamma.DMZ.utils.FileManager;
-import me.thamma.DMZ.utils.Utils;
 
 /**
  * Created by pc on 12.06.2015.
@@ -65,7 +65,7 @@ public class DataListener implements Listener {
 							final String oldname = db.getString("medal", "");
 							if (oldname.equals("")) {
 								e.getPlayer().setItemInHand(new ItemStack(Material.AIR));
-								e.getPlayer().sendMessage(Utils.color("&eYou hang the medal around your neck."));
+								msg(e.getPlayer(), "&eYou hang the medal around your neck.");
 								db.set("medal", newname);
 							} else {
 								ItemStack is = e.getPlayer().getItemInHand();
@@ -78,8 +78,8 @@ public class DataListener implements Listener {
 								is.setItemMeta(im);
 								e.getPlayer().setItemInHand(is);
 								db.set("medal", newname);
-								e.getPlayer().sendMessage(Utils.color(
-										"&eYou exchanged the medal you are wearing with the one from your pocket.."));
+								msg(e.getPlayer(),
+										"&eYou exchanged the medal you are wearing with the one from your pocket..");
 							}
 						}
 					}

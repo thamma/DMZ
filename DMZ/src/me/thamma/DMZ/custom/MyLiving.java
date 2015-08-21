@@ -109,9 +109,8 @@ public class MyLiving {
 	 */
 	public int attack(MyLiving target) {
 		// no decent calculation!
-		return (Math.max(0,
-				this.getEnchantmentSum(MyEnchantmentType.Damage) - target.getEnchantmentSum(MyEnchantmentType.Armor)))
-				* 2;
+		return (int) (Math.max(0, this.getEnchantmentSum(MyEnchantmentType.Damage)
+				- Double.valueOf(0.8 * target.getEnchantmentSum(MyEnchantmentType.Armor)))) * 2;
 	}
 
 }

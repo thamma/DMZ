@@ -1,7 +1,7 @@
 package me.thamma.DMZ.chests;
 
-import me.thamma.DMZ.core.Main;
-import me.thamma.DMZ.utils.Utils;
+import static me.thamma.DMZ.utils.Utils.msg;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -10,6 +10,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
+
+import me.thamma.DMZ.core.Main;
 
 public class ChestListener implements Listener {
 
@@ -22,8 +24,8 @@ public class ChestListener implements Listener {
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e) {
 		if (MyChest.isChest(e.getBlock())) {
-			e.setCancelled(true);	
-			e.getPlayer().sendMessage(Utils.color("&cBe careful. You don't want to break a respawning chest."));
+			e.setCancelled(true);
+			msg(e.getPlayer(), "&cBe careful. You don't want to break a respawning chest.");
 		}
 	}
 

@@ -25,12 +25,17 @@ public class CommandHandler {
 	public void perform() {
 		for (Argument a : patterns) {
 			if (a.matchPattern(args)) {
-				a.run(sender);
+				System.out.println(a.descr());
+				a.run(sender, Argument.interpreteArgs(args));
 				return;
 			}
 		}
-		// System.out.println("NO MATCH");
-		sender.sendMessage(helpPage());
+		if (sender != null) {
+			sender.sendMessage(helpPage());
+		} else {
+			for (String s : helpPage())
+				System.out.println(s);
+		}
 	}
 
 	public CommandHandler add(Argument a) {

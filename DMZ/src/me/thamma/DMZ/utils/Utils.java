@@ -4,8 +4,24 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 
 public class Utils {
+
+	public static void msg(Player p, String s) {
+		p.sendMessage(Utils.color(s));
+	}
+
+	public static void msg(Player p, String[] s) {
+		for (String t : s)
+			msg(p, t);
+	}
+
+	public static void broadcast(String s) {
+		for (Player p : Bukkit.getOnlinePlayers())
+			if (p.isOp())
+				msg(p, s);
+	}
 
 	public static String[] helpPage(String command, String... args) {
 		String title = Utils.color("&e--- &6" + command + " Helppage &e---");

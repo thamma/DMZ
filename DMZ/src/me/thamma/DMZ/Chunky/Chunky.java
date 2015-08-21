@@ -1,5 +1,9 @@
 package me.thamma.DMZ.Chunky;
 
+import static me.thamma.DMZ.utils.Utils.broadcast;
+import static me.thamma.DMZ.utils.Utils.color;
+import static me.thamma.DMZ.utils.Utils.msg;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +14,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import me.thamma.DMZ.utils.Database;
-import me.thamma.DMZ.utils.Utils;
 
 /**
  * Created by pc on 13.06.2015.
@@ -56,13 +59,13 @@ public class Chunky {
 	}
 
 	public static void saveAll() {
-		Bukkit.broadcastMessage("Saving chunkys. This might take some time. [" + updated.size() + "]");
+		broadcast("&6Saving chunkys. This might take some time. &7[" + updated.size() + "]");
 		for (String s : updated) {
 			Chunky c = new Chunky(s);
 			c.save();
 		}
 		updated.clear();
-		Bukkit.broadcastMessage("Saving complete!");
+		broadcast("&6Saving complete!");
 	}
 
 	public HashMap<Attribute, String> getMap() {
@@ -141,9 +144,9 @@ public class Chunky {
 		}
 		if (!(a.getDefaultValue().equals("true") || a.getDefaultValue().equals("false")))
 			for (String s : keys)
-				p.sendMessage(Utils.color("&" + res[Math.abs(s.hashCode()) % res.length]) + s);
+				p.sendMessage(color("&" + res[Math.abs(s.hashCode()) % res.length]) + s);
 		for (String m : out)
-			p.sendMessage(Utils.color(m));
+			msg(p, m);
 	}
 
 	public void print(Player p, Attribute a) {

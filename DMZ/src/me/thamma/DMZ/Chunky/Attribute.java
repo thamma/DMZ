@@ -5,16 +5,15 @@ package me.thamma.DMZ.Chunky;
  */
 public enum Attribute {
 
-    Mobspawn("false"), Level("1"), Invincible("false"), Name(""), SubTitle("");
+	Mobspawn("false"), Level("1"), Invincible("false"), Name(""), SubTitle(""), Outpost("true");
 
+	private String def;
 
-    private String def;
+	Attribute(String def) {
+		this.def = def;
+	}
 
-    Attribute(String def) {
-        this.def = def;
-    }
-
-    public String getDefaultValue() {
-        return this.def;
-    }
+	public String getDefaultValue() {
+		return this.def;
+	}
 }

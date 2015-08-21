@@ -1,11 +1,14 @@
 package me.thamma.DMZ.Battle;
 
+import static me.thamma.DMZ.utils.Utils.msg;
+
 import java.util.Random;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
@@ -69,8 +72,16 @@ public class BattleListener implements Listener {
 				amount++;
 			if (chance > 95)
 				amount++;
-			e.getDrops().addAll(m.getLoot().getRandomLoot(amount));
+			e.getDrops().addAll(m.getLoot().getRandomLoot(amount));	
 		}
+	}
+	
+	
+
+	@EventHandler
+	public void onExpGain(PlayerExpChangeEvent e) {
+		msg(e.getPlayer(), "You gained " + e.getAmount() + " exp");
+		
 	}
 
 }

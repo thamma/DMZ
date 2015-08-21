@@ -1,6 +1,9 @@
 package me.thamma.DMZ.chests;
 
+import static me.thamma.DMZ.utils.Utils.msg;
+
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.bukkit.Location;
@@ -17,7 +20,6 @@ import org.bukkit.inventory.ItemStack;
 
 import me.thamma.DMZ.utils.Argument;
 import me.thamma.DMZ.utils.CommandHandler;
-import me.thamma.DMZ.utils.Utils;
 
 public class ChestCommands implements CommandExecutor {
 
@@ -35,7 +37,7 @@ public class ChestCommands implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender paramCommandSender, Command paramCommand, String paramString,
-			final String[] args) {
+			String[] args) {
 		if (paramCommand.getName().equalsIgnoreCase("chest")) {
 			CommandHandler ch = new CommandHandler(paramCommandSender, "chest", args).add(new Argument() {
 
@@ -51,13 +53,13 @@ public class ChestCommands implements CommandExecutor {
 
 				@SuppressWarnings("deprecation")
 				@Override
-				public void run(Player p) {
-					int amount = Integer.parseInt(args[1]);
-					int time = Integer.parseInt(args[2]);
+				public void run(Player p, List<String> args) {
+					int amount = Integer.parseInt(args.get(1));
+					int time = Integer.parseInt(args.get(2));
 
 					Block target = p.getTargetBlock(transparents, 10);
 					if (MyChest.isChest(target.getLocation())) {
-						p.sendMessage("This is already a respawning chest");
+						msg(p, "This is already a respawning chest");
 					} else {
 
 						Chest chestBlock = (Chest) target.getState();
@@ -69,7 +71,7 @@ public class ChestCommands implements CommandExecutor {
 							}
 						}
 						if (empty) {
-							p.sendMessage(Utils.color("&cYou cannot make an empty chest a respawning chest!"));
+							msg(p, "&cYou cannot make an empty chest a respawning chest!");
 						} else {
 							// create chest
 							MyChest vChest = new MyChest(chestBlock.getLocation(), time, amount);
@@ -89,7 +91,7 @@ public class ChestCommands implements CommandExecutor {
 							((org.bukkit.block.Chest) ref.getBlock().getState()).getBlockInventory()
 									.setContents(chestBlock.getBlockInventory().getContents());
 							vChest.fill();
-							p.sendMessage(Utils.color("&eRespawning chest created"));
+							msg(p, "&eRespawning chest created");
 						}
 					}
 				}
@@ -122,13 +124,13 @@ public class ChestCommands implements CommandExecutor {
 				}
 
 				@Override
-				public void run(Player p) {
+				public void run(Player p, List<String> args) {
 
 					Block target = p.getTargetBlock(transparents, 10);
 					if (MyChest.isChest(target)) {
 						p.openInventory(MyChest.getChest(target.getLocation()).getRemoteChest().getInventory());
 					} else {
-						p.sendMessage(org.bukkit.ChatColor.RED + "This is no respawning chest.");
+						msg(p, "&cThis is no respawning chest.");
 					}
 				}
 
@@ -150,14 +152,14 @@ public class ChestCommands implements CommandExecutor {
 				}
 
 				@Override
-				public void run(Player p) {
+				public void run(Player p, List<String> args) {
 					Block target = p.getTargetBlock(transparents, 10);
 					if (MyChest.isChest(target.getLocation())) {
 						MyChest c = MyChest.getChest(target.getLocation());
-						p.sendMessage("Respawning chest (id " + c.getId() + ") deleted.");
+						msg(p, "Respawning chest (id " + c.getId() + ") deleted.");
 						c.delete();
 					} else {
-						p.sendMessage(org.bukkit.ChatColor.RED + "This is no respawning chest.");
+						msg(p, "&cThis is no respawning chest");
 					}
 				}
 
@@ -179,9 +181,9 @@ public class ChestCommands implements CommandExecutor {
 				}
 
 				@Override
-				public void run(Player p) {
+				public void run(Player p, List<String> args) {
 					MyChest.respawnAll();
-					p.sendMessage(Utils.color("&eRespawning chests respawned."));
+					msg(p, "&eRespawning chests respawned.");
 				}
 
 			});
