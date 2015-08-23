@@ -1,4 +1,4 @@
-package me.thamma.DMZ.chests;
+package me.thamma.DMZ.Listeners;
 
 import static me.thamma.DMZ.utils.Utils.msg;
 
@@ -11,6 +11,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 
+import me.thamma.DMZ.chests.MyChest;
 import me.thamma.DMZ.core.Main;
 
 public class ChestListener implements Listener {

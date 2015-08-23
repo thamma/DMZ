@@ -1,4 +1,4 @@
-package me.thamma.DMZ.Chunky;
+package me.thamma.DMZ.Listeners;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +15,8 @@ import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import me.thamma.DMZ.Battle.BattleListener;
+import me.thamma.DMZ.Chunky.Attribute;
+import me.thamma.DMZ.Chunky.Chunky;
 import me.thamma.DMZ.utils.TitlesAPI;
 
 /**

@@ -1,4 +1,4 @@
-package me.thamma.DMZ.Battle;
+package me.thamma.DMZ.Listeners;
 
 import static me.thamma.DMZ.utils.Utils.msg;
 

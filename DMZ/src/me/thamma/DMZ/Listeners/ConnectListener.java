@@ -1,4 +1,4 @@
-package me.thamma.DMZ.Connection;
+package me.thamma.DMZ.Listeners;
 
 import static me.thamma.DMZ.utils.Database.config;
 import static me.thamma.DMZ.utils.Database.playerDb;
@@ -16,7 +16,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import me.thamma.DMZ.Chunky.Chunky;
-import me.thamma.DMZ.Chunky.ChunkyListener;
 import me.thamma.DMZ.utils.Utils;
 import me.thamma.DMZ.warps.Warp;
 
@@ -32,7 +31,7 @@ public class ConnectListener implements Listener {
 		String op = "";
 		if (p.isOp())
 			op = "&f[&cA&f]&r";
-		return op + "&f[&eLv. " + levelColor(p.getLevel()) + p.getLevel() + "&f] &7" + p.getName() + "&r";
+		return op + "&f[&eLv. " + levelColor(p.getLevel()) + p.getLevel() + "&f]" + medal + " &7" + p.getName() + "&r";
 	}
 
 	public static String levelColor(int i) {

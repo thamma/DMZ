@@ -220,6 +220,34 @@ public class DataCommands implements CommandExecutor {
 
 				@Override
 				public String name() {
+					return "addlore";
+				}
+
+				@Override
+				public String descr() {
+					return "Adds to the lore of your item";
+				}
+
+				@Override
+				public String condition(Player p) {
+					return inHandCondition(p);
+				}
+
+				@Override
+				public void run(Player p, List<String> args) {
+					new ChatTask(p) {
+						@Override
+						public void run(ArrayList<String> l, Player p) {
+							MyItem mi = new MyItem(p.getItemInHand());
+							p.setItemInHand(mi.addLore(l).getItemStack());
+						}
+					};
+				}
+
+			}).add(new Argument() {
+
+				@Override
+				public String name() {
 					return "medal";
 				}
 

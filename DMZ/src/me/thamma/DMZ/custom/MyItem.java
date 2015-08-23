@@ -86,6 +86,22 @@ public class MyItem {
 		}
 	}
 
+	public MyItem setAmount(int arg0) {
+		MyItem temp = this.clone();
+		temp.is.setAmount(arg0);
+		return temp;
+	}
+
+	public boolean isSimilar(MyItem arg0) {
+		if (this == null || arg0 == null)
+			return false;
+		if (!arg0.is.getType().equals(this.is.getType()))
+			return false;
+		if (!ChatColor.stripColor(this.getName()).equals(ChatColor.stripColor(arg0.getName())))
+			return false;
+		return true;
+	}
+
 	public MyItem setRawLore(List<String> arg0) {
 		MyItem temp = this.clone();
 		temp.rawlore = arg0;
@@ -210,6 +226,10 @@ public class MyItem {
 		return temp;
 	}
 
+	public int getAmount() {
+		return this.is.getAmount();
+	}
+
 	public MyItem addEnchantment(Enchantment e, int lv) {
 		MyItem temp = this.clone();
 		temp.enchants.put(e, lv);
@@ -241,6 +261,8 @@ public class MyItem {
 	}
 
 	public ItemStack getItemStack() {
+		if (this.is.getAmount() == 0)
+			return new ItemStack(Material.AIR);
 		if (!this.name.equals(""))
 			im.setDisplayName(Utils.color(this.name));
 		ArrayList<String> l = new ArrayList<String>();
@@ -259,8 +281,16 @@ public class MyItem {
 		is.addEnchantments(enchants);
 		is.setItemMeta(this.im);
 		NBTItem n = new NBTItem(is);
-		n.setInteger("Unbreakable", (this.unbreakable ? 1 : 0));
-		n.setInteger("HideFlags", (this.hideFlags ? 6 : 0));
+		if (this.unbreakable) {
+			n.setInteger("Unbreakable", 1);
+		} else if (n.getInteger("Unbreakable") == 1) {
+			n.setInteger("Unbreakable", 0);
+		}
+		if (this.hideFlags) {
+			n.setInteger("HideFlags", 6);
+		} else if (n.getInteger("HideFlags") > 0) {
+			n.setInteger("HideFlags", 0);
+		}
 		this.is = n.getItem();
 		return is;
 	}

@@ -10,7 +10,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import me.thamma.DMZ.Chunky.ChunkyListener.Setting;
+import me.thamma.DMZ.Listeners.ChunkyListener;
+import me.thamma.DMZ.Listeners.ChunkyListener.Setting;
 import me.thamma.DMZ.utils.Argument;
 import me.thamma.DMZ.utils.CommandHandler;
 

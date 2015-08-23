@@ -10,31 +10,15 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="file://$USER_HOME$/Documents/GitHub/Spigot" />
-          <root url="file://$USER_HOME$/Documents/GitHub/Spigot" />
+          <root url="jar://$USER_HOME$/Documents/GitHub/Spigot/spigot-1.8.8.jar!/" />
+          <root url="jar://$USER_HOME$/Documents/GitHub/Spigot/craftbukkit-1.8.8.jar!/" />
+          <root url="jar://$USER_HOME$/Documents/GitHub/Spigot/BuildTools.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="file://$USER_HOME$/Documents/GitHub/Spigot" />
-          <root url="file://$USER_HOME$/Documents/GitHub/Spigot/Bukkit/src/main/java" />
-          <root url="file://$USER_HOME$/Documents/GitHub/Spigot/Bukkit/src/main/javadoc" />
-          <root url="file://$USER_HOME$/Documents/GitHub/Spigot/Bukkit/src/test/java" />
-          <root url="file://$USER_HOME$/Documents/GitHub/Spigot/CraftBukkit/src/main/java" />
-          <root url="file://$USER_HOME$/Documents/GitHub/Spigot/CraftBukkit/src/test/java" />
-          <root url="file://$USER_HOME$/Documents/GitHub/Spigot/Spigot/Bukkit/src/main/java" />
-          <root url="file://$USER_HOME$/Documents/GitHub/Spigot/Spigot/Bukkit/src/main/javadoc" />
-          <root url="file://$USER_HOME$/Documents/GitHub/Spigot/Spigot/Bukkit/src/test/java" />
-          <root url="file://$USER_HOME$/Documents/GitHub/Spigot/Spigot/CraftBukkit/src/main/java" />
-          <root url="file://$USER_HOME$/Documents/GitHub/Spigot/Spigot/CraftBukkit/src/test/java" />
-          <root url="file://$USER_HOME$/Documents/GitHub/Spigot/Spigot/Spigot-API/src/main/java" />
-          <root url="file://$USER_HOME$/Documents/GitHub/Spigot/Spigot/Spigot-API/src/main/javadoc" />
-          <root url="file://$USER_HOME$/Documents/GitHub/Spigot/Spigot/Spigot-API/src/test/java" />
-          <root url="file://$USER_HOME$/Documents/GitHub/Spigot/Spigot/Spigot-Server/src/main/java" />
-          <root url="file://$USER_HOME$/Documents/GitHub/Spigot/Spigot/Spigot-Server/src/test/java" />
-          <root url="file://$USER_HOME$/Documents/GitHub/Spigot/work/decompile-02ef1995" />
+          <root url="jar://$USER_HOME$/Documents/GitHub/Spigot/spigot-1.8.8.jar!/" />
+          <root url="jar://$USER_HOME$/Documents/GitHub/Spigot/craftbukkit-1.8.8.jar!/" />
         </SOURCES>
-        <jarDirectory url="file://$USER_HOME$/Documents/GitHub/Spigot" recursive="false" />
-        <jarDirectory url="file://$USER_HOME$/Documents/GitHub/Spigot" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
   </component>

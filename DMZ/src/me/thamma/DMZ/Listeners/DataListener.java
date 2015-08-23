@@ -1,4 +1,4 @@
-package me.thamma.DMZ.data;
+package me.thamma.DMZ.Listeners;
 
 import static me.thamma.DMZ.utils.Database.playerDb;
 import static me.thamma.DMZ.utils.Utils.msg;

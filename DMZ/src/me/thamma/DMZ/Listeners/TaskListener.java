@@ -1,4 +1,4 @@
-package me.thamma.DMZ.data;
+package me.thamma.DMZ.Listeners;
 
 import static me.thamma.DMZ.utils.Utils.msg;
 
@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import me.thamma.DMZ.data.ChatTask;
 import me.thamma.DMZ.utils.Utils;
 
 public class TaskListener implements Listener {
@@ -29,13 +30,13 @@ public class TaskListener implements Listener {
 			ArrayList<String> l = messages.get(p.getName());
 			if (!e.getMessage().equalsIgnoreCase("done.") && t.getAmount() != messages.get(p.getName()).size() + 1) {
 				// if not ready yet
-				l.add(Utils.color(e.getMessage()));
+				l.add(Utils.color(e.getMessage().replaceAll("\\\\", "")));
 				messages.put(p.getName(), l);
-				msg(p, "&eAdded line: \"" + e.getMessage() + "&e\"");
+				msg(p, "&eAdded line: \"" + e.getMessage().replaceAll("\\\\", "") + "&e\"");
 				return;
 			}
 			if (!e.getMessage().equals("done."))
-				l.add(Utils.color(e.getMessage()));
+				l.add(Utils.color(e.getMessage().replaceAll("\\\\", "")));
 			t.runTask(l);
 			messages.get(p.getName()).clear();
 			tasks.remove(p.getName());
