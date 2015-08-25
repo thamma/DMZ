@@ -5,7 +5,7 @@ out/
 #################
 
 *.pydevproject
-.project
+#.project
 .metadata
 bin/
 tmp/
@@ -14,7 +14,7 @@ tmp/
 *.swp
 *~.nib
 local.properties
-.classpath
+#.classpath
 .settings/
 .loadpath
 
@@ -216,3 +216,4 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+/target/
