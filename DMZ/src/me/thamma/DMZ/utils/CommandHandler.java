@@ -11,18 +11,14 @@ import org.bukkit.command.CommandSender;
 public class CommandHandler {
 
 	private List<Argument> patterns;
-	private CommandSender sender;
 	private String cmd;
-	private String[] args;
 
-	public CommandHandler(CommandSender sender, String cmd, String[] args) {
+	public CommandHandler(String cmd) {
 		this.patterns = new ArrayList<Argument>();
-		this.sender = sender;
 		this.cmd = cmd;
-		this.args = args;
 	}
 
-	public void perform() {
+	public void performCommand(CommandSender sender, String[] args) {
 		for (Argument a : patterns) {
 			if (a.matchPattern(args)) {
 				System.out.println(a.descr());

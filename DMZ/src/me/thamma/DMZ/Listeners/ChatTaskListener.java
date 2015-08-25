@@ -13,7 +13,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import me.thamma.DMZ.data.ChatTask;
 import me.thamma.DMZ.utils.Utils;
 
-public class TaskListener implements Listener {
+public class ChatTaskListener implements Listener {
 
 	private static HashMap<String, ArrayList<String>> messages = new HashMap<String, ArrayList<String>>();
 	public static HashMap<String, ChatTask> tasks = new HashMap<String, ChatTask>();

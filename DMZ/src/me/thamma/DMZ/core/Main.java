@@ -14,7 +14,7 @@ import me.thamma.DMZ.Listeners.ChunkyListener;
 import me.thamma.DMZ.Listeners.ConnectListener;
 import me.thamma.DMZ.Listeners.DataListener;
 import me.thamma.DMZ.Listeners.ItemInteractListener;
-import me.thamma.DMZ.Listeners.TaskListener;
+import me.thamma.DMZ.Listeners.ChatTaskListener;
 import me.thamma.DMZ.chests.ChestCommands;
 import me.thamma.DMZ.chests.MyChest;
 import me.thamma.DMZ.custom.MyItemCommands;
@@ -40,7 +40,7 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new BattleListener(), this);
 		getServer().getPluginManager().registerEvents(new ConnectListener(), this);
 		getServer().getPluginManager().registerEvents(new ColorSign(), this);
-		getServer().getPluginManager().registerEvents(new TaskListener(), this);
+		getServer().getPluginManager().registerEvents(new ChatTaskListener(), this);
 		getServer().getPluginManager().registerEvents(new ItemInteractListener(this), this);
 
 		initMaps();

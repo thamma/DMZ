@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import org.bukkit.entity.Player;
 
-import me.thamma.DMZ.Listeners.TaskListener;
+import me.thamma.DMZ.Listeners.ChatTaskListener;
 
 /**
  * Created by pc on 19.06.2015.
@@ -18,7 +18,7 @@ public abstract class ChatTask implements MyRunnable {
 	public ChatTask(Player p) {
 		this.player = p;
 		taskEnabled();
-		TaskListener.tasks.put(player.getName(), this);
+		ChatTaskListener.tasks.put(player.getName(), this);
 	}
 
 	final public void runTask(ArrayList<String> l) {

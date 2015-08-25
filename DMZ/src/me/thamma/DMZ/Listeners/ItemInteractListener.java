@@ -2,6 +2,7 @@ package me.thamma.DMZ.Listeners;
 
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
@@ -73,17 +74,16 @@ public class ItemInteractListener implements Listener {
 			TitlesAPI.sendActionBar(p, "&eThe goldbag contained &6" + amount + " &egold.");
 		}
 	}, new ItemTask(new MyItem(Material.REDSTONE_TORCH_ON).setName("Flare")) {
-		@SuppressWarnings("deprecation")
 		@Override
 		public void onBlockPlace(final BlockPlaceEvent e) {
 			TitlesAPI.sendActionBar(e.getPlayer(), "&6Flare&e activated. It will attract nearby zombies!");
-			SelfCancellingTask sct = new SelfCancellingTask(8) {
+			SelfCancellingTask sct = new SelfCancellingTask(5) {
 
 				Villager v;
 
 				@Override
 				public void runBefore() {
-					v = (Villager) e.getBlock().getWorld().spawnCreature(e.getBlock().getLocation().add(0.5, 0, 0.5),
+					v = (Villager) e.getBlock().getWorld().spawnEntity(e.getBlock().getLocation().add(0.5, 0, 0.5),
 							EntityType.VILLAGER);
 					v.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, false));
 					v.setNoDamageTicks(Integer.MAX_VALUE);
@@ -92,22 +92,22 @@ public class ItemInteractListener implements Listener {
 
 				@Override
 				public void runAfter() {
+					for (Entity en : v.getNearbyEntities(15D, 15d, 15D))
+						if (en instanceof Zombie)
+							((Zombie) en).setTarget(null);
+
 					v.remove();
 					e.getBlock().setType(Material.AIR);
 				}
 
 				@Override
 				public void myrun() {
-					for (Entity en : v.getNearbyEntities(20D, 20D, 20D)) {
-						if (en instanceof Zombie) {
-							Zombie z = (Zombie) en;
-							z.setTarget(v);
-						}
-					}
-
+					for (Entity en : v.getNearbyEntities(15D, 15d, 15D))
+						if (en instanceof Zombie)
+							((Zombie) en).setTarget(v);
 				}
 			};
-			sct.runTaskTimerAsynchronously(plugin, 0L, 20L);
+			sct.runTaskTimerAsynchronously(plugin, 0L, 2 * 20L);
 		}
 	} };
 
@@ -116,7 +116,6 @@ public class ItemInteractListener implements Listener {
 		net.minecraft.server.v1_8_R3.Entity nmsEntity = ((CraftEntity) e).getHandle();
 
 		NBTTagCompound tag = new NBTTagCompound();
-
 		nmsEntity.c(tag);
 
 		tag.setBoolean("NoAI", true);
