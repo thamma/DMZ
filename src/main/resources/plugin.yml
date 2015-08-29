@@ -16,3 +16,6 @@ commands:
     chunky:
        description: Use /chunky for help
        usage: /chunky
+    myitem:
+       description: Use /myitem for help
+       usage: /myitem

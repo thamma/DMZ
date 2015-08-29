@@ -4,15 +4,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Utils {
 
-	public static void msg(Player p, String s) {
+	public static void msg(CommandSender p, String s) {
 		p.sendMessage(Utils.color(s));
 	}
 
-	public static void msg(Player p, String[] s) {
+	public static void msg(CommandSender p, String[] s) {
 		for (String t : s)
 			msg(p, t);
 	}

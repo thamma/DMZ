@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.thamma.dmz</groupId>
   <artifactId>dmz</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.3.3-SNAPSHOT</version>
   <repositories>
   <repository>
             <id>spigot-repo</id>

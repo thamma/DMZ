@@ -68,10 +68,6 @@ public abstract class Argument implements CommandRunnable {
 
 	@Override
 	public void run(CommandSender sender, List<String> args) {
-		if (sender == null) {
-			System.out.println("Command ran. Args: " + args);
-			return;
-		}
 		if (sender instanceof Player) {
 			Player p = (Player) sender;
 			if (!hasPermission(p)) {
