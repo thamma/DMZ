@@ -80,7 +80,7 @@ public abstract class Argument implements CommandRunnable {
 				msg(p, condition(p));
 			}
 		} else {
-			sender.sendMessage("This is an ingame-only command!");
+			sender.sendMessage("This is an player-only command!");
 		}
 	}
 
