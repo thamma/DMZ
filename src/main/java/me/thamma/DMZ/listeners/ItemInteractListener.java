@@ -4,7 +4,6 @@ import java.util.Random;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -23,8 +22,6 @@ import me.thamma.DMZ.custom.MyItem;
 import me.thamma.DMZ.utils.ItemTask;
 import me.thamma.DMZ.utils.SelfCancellingTask;
 import me.thamma.DMZ.utils.TitlesAPI;
-import net.minecraft.server.v1_8_R3.EntityLiving;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
 
 public class ItemInteractListener implements Listener {
 
@@ -113,16 +110,16 @@ public class ItemInteractListener implements Listener {
 
 	public void setNoAI(Entity e) {
 
-		net.minecraft.server.v1_8_R3.Entity nmsEntity = ((CraftEntity) e).getHandle();
-
-		NBTTagCompound tag = new NBTTagCompound();
-
-		nmsEntity.c(tag);
-
-		tag.setBoolean("NoAI", true);
-
-		EntityLiving el = (EntityLiving) nmsEntity;
-		el.a(tag);
+//		net.minecraft.server.v1_8_R3.Entity nmsEntity = ((CraftEntity) e).getHandle();
+//
+//		NBTTagCompound tag = new NBTTagCompound();
+//
+//		nmsEntity.c(tag);
+//
+//		tag.setBoolean("NoAI", true);
+//
+//		EntityLiving el = (EntityLiving) nmsEntity;
+//		el.a(tag);
 	}
 
 	public ItemTask getTask(MyItem arg0) {

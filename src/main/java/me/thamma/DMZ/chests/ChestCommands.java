@@ -21,7 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import me.thamma.DMZ.utils.Argument;
 import me.thamma.DMZ.utils.CommandHandler;
 
-public class ChestCommands implements CommandExecutor {
+public class ChestCommands47 {
 
 	final static CommandHandler ch = new CommandHandler("chest").add(new Argument() {
 
